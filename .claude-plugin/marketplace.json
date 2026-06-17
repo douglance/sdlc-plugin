@@ -1,0 +1,12 @@
+{
+  "name": "sdlc-marketplace",
+  "owner": { "name": "Doug Lance" },
+  "metadata": { "description": "Skill-centric SDLC plugin: lifecycle phases as skills routing to specialized subagents." },
+  "plugins": [
+    {
+      "name": "sdlc",
+      "source": "./",
+      "description": "Skill-centric SDLC: lifecycle phases as skills routing to specialized subagents."
+    }
+  ]
+}
