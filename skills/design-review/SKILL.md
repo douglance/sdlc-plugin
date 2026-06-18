@@ -1,6 +1,6 @@
 ---
-name: grill
-description: Interview the user relentlessly about a plan or design until reaching shared understanding, resolving each branch of the decision tree. Use when user wants to stress-test a plan, get grilled on their design, or mentions "grill me".
+name: design-review
+description: Interview the user relentlessly about a plan or design until reaching shared understanding, resolving each branch of the decision tree. Use when the user wants to stress-test, critique, or pressure-test a plan or design.
 user-invocable: true
 metadata:
   pattern: inversion

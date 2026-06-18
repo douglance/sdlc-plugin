@@ -2,9 +2,7 @@
 
 Canonical definitions for the terms the SDLC plugin uses across skills and agents. Each term is
 defined **once, here**; skills point to this file instead of restating definitions, so a meaning
-changes in one place. The first three sections are established software-engineering vocabulary; the
-last section, **Plugin conventions**, is terminology specific to *this* plugin with no standard
-equivalent — kept separate so nothing is dressed up as canon. For how the concepts relate, see
+changes in one place. For how the concepts relate, see
 [ONTOLOGY.md](ONTOLOGY.md).
 
 ## Process & lifecycle
@@ -37,8 +35,8 @@ tests, so the link from a requirement to the code and tests that satisfy it is g
 
 ## Design quality
 
-The established vocabulary for what makes a module well-formed (Parnas; Constantine & Yourdon;
-Dijkstra). Use these rather than ad-hoc words like "component," "service," or "boundary."
+The established vocabulary for what makes a module well-formed. Use these rather than ad-hoc words
+like "component," "service," or "boundary."
 
 **Module** — anything with an interface and an implementation; scale-agnostic (a function, class, or
 package).
@@ -48,7 +46,7 @@ ordering constraints, error modes, configuration, and performance characteristic
 
 **Implementation** — what is inside a module: its body of code, hidden from callers.
 
-**Information hiding** (Parnas, 1972) — designing each module around a decision likely to change, and
+**Information hiding** — designing each module around a decision likely to change, and
 hiding that decision behind its interface so change stays local.
 
 **Encapsulation** — bundling data with the operations on it and exposing only the interface; the
@@ -56,13 +54,13 @@ mechanism that enforces information hiding.
 
 **Abstraction** — exposing the essential behavior of a module while omitting incidental detail.
 
-**Cohesion** (Constantine & Yourdon) — how single-purpose a module is. High cohesion (one
+**Cohesion** — how single-purpose a module is. High cohesion (one
 well-defined responsibility) is the goal.
 
-**Coupling** (Constantine & Yourdon) — how dependent modules are on each other's internals. Low
+**Coupling** — how dependent modules are on each other's internals. Low
 coupling (modules interact only through stable interfaces) is the goal.
 
-**Separation of concerns** (Dijkstra) — keeping distinct responsibilities in distinct modules so
+**Separation of concerns** — keeping distinct responsibilities in distinct modules so
 each can be reasoned about and changed independently.
 
 **Quality attribute** — a measurable property of the whole system (the "-ilities": performance,
@@ -86,7 +84,7 @@ contrast, keyboard operability, focus order, labels/alt text, and reduced-motion
 **Verification vs validation** — verification asks "did we build it right?" (matches the spec);
 validation asks "did we build the right thing?" (meets the need).
 
-**RED → GREEN → REFACTOR** (Beck) — the test-driven cycle: write a failing test (RED), write the
+**RED → GREEN → REFACTOR** — the test-driven cycle: write a failing test (RED), write the
 minimum code to pass it (GREEN), then improve the code with tests still passing (REFACTOR).
 
 **Regression test** — a test that pins behavior so a future change can't silently break it. For a
@@ -116,6 +114,20 @@ specification, a golden/approved output, an invariant property, or a prior versi
 **Review / inspection** — reading code or a design against a checklist to find defects, rather than
 executing it. Catches what dynamic tests don't exercise.
 
+## Operations
+
+**Observability** — the ability to understand a running system's internal state from its outputs:
+logs, metrics, and traces.
+
+**Service-level objective (SLO)** — a measurable reliability target for a service (e.g. 99.9% of
+requests under 300 ms), against which alerts and error budgets are set.
+
+**Incident management** — detecting, triaging by impact, mitigating, resolving, and learning from a
+production failure (the postmortem).
+
+**Runbook** — a written, repeatable procedure for operating or recovering a service, so response
+doesn't depend on one person's memory.
+
 ## Plugin conventions
 
 Terminology specific to this plugin — **not** standard SDLC. Listed here so it is never mistaken for
@@ -128,10 +140,8 @@ thread coordinates and the fork executes.
 **`out_of_scope`** — the literal field the plugin uses to record the out-of-scope set (see Scope),
 echoed into every dispatch as a hard prohibition.
 
-**Falsification** — the plugin's house stance for `product-owner` and `qa`: treat every requirement
-or claim of correctness as a hypothesis to *disprove*, not confirm. (Its canonical cousins are
-negative testing for code and requirements validation for specs; the plugin uses one word for the
-shared adversarial posture.)
+**Falsification** — the plugin's house stance for `product-owner` and `tester`: treat every requirement
+or claim of correctness as a hypothesis to *disprove*, not confirm.
 
 **Always / Ask-First / Never** — the plugin's three-tier rule for risky actions. *Always*: safe, do
 it. *Ask-First*: irreversible/high-blast-radius/destructive — confirm first. *Never*: prohibited.

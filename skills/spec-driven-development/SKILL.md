@@ -5,10 +5,6 @@ description: Creates specs before coding. Use when starting a new project, featu
 
 # Spec-Driven Development
 
-## Overview
-
-Write a structured specification before writing any code. The spec is the shared source of truth between you and the human engineer — it defines what we're building, why, and how we'll know it's done. Code without a spec is guessing.
-
 ## When to Use
 
 - Starting a new project or feature
@@ -46,7 +42,7 @@ ASSUMPTIONS I'M MAKING:
 → Correct me now or I'll proceed with these.
 ```
 
-Don't silently fill in ambiguous requirements. The spec's entire purpose is to surface misunderstandings *before* code gets written — assumptions are the most dangerous form of misunderstanding.
+Don't silently fill in ambiguous requirements.
 
 **Write a spec document covering these six core areas:**
 
@@ -70,7 +66,7 @@ Don't silently fill in ambiguous requirements. The spec's entire purpose is to s
    docs/          → Documentation
    ```
 
-4. **Code Style** — One real code snippet showing your style beats three paragraphs describing it. Include naming conventions, formatting rules, and examples of good output.
+4. **Code Style** — Include naming conventions, formatting rules, and examples of good output.
 
 5. **Testing Strategy** — What framework, where tests live, coverage expectations, which test levels for which concerns.
 
@@ -129,8 +125,6 @@ REFRAMED SUCCESS CRITERIA:
 → Are these the right targets?
 ```
 
-This lets you loop, retry, and problem-solve toward a clear goal rather than guessing what "faster" means.
-
 ### Phase 2: Plan
 
 With the validated spec, generate a technical implementation plan:
@@ -174,24 +168,6 @@ The spec is a living document, not a one-time artifact:
 - **Update when scope changes** — Features added or cut should be reflected in the spec.
 - **Commit the spec** — The spec belongs in version control alongside the code.
 - **Reference the spec in PRs** — Link back to the spec section that each PR implements.
-
-## Common Rationalizations
-
-| Rationalization | Reality |
-|---|---|
-| "This is simple, I don't need a spec" | Simple tasks don't need *long* specs, but they still need acceptance criteria. A two-line spec is fine. |
-| "I'll write the spec after I code it" | That's documentation, not specification. The spec's value is in forcing clarity *before* code. |
-| "The spec will slow us down" | A 15-minute spec prevents hours of rework. Waterfall in 15 minutes beats debugging in 15 hours. |
-| "Requirements will change anyway" | That's why the spec is a living document. An outdated spec is still better than no spec. |
-| "The user knows what they want" | Even clear requests have implicit assumptions. The spec surfaces those assumptions. |
-
-## Red Flags
-
-- Starting to write code without any written requirements
-- Asking "should I just start building?" before clarifying what "done" means
-- Implementing features not mentioned in any spec or task list
-- Making architectural decisions without documenting them
-- Skipping the spec because "it's obvious what to build"
 
 ## Verification
 

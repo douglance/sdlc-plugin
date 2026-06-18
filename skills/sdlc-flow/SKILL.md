@@ -21,7 +21,7 @@ Run these in order; each one's output is the next one's input. Skip any phase th
 3. **`planning`** (→ project-manager) — break the spec into a phased plan with dependencies, risks,
    and an explicit out-of-scope set. Produces a plan.
 4. **`design`** (→ architect) — settle interfaces, contracts, exact files, and trade-offs.
-   Produces a technical design. For user-facing work, pair with **`visual-design`** (→ visual-designer)
+   Produces a technical design. For user-facing work, pair with **`visual-design`** (→ graphic-designer)
    for layout, composition, states, and accessibility.
 5. **`implementation`** (→ engineer) — build it test-first in vertical slices. Produces tested,
    committed code.
@@ -30,11 +30,30 @@ Run these in order; each one's output is the next one's input. Skip any phase th
 7. **`quality`** (→ quality-engineer) — assure the change beyond execution: verification & validation,
    review/inspection, and the quality attributes. Produces a quality verdict.
 
-Then branch to whichever terminal phases apply:
+## Operate & evolve (the loop)
+
+Shipping isn't the end — the lifecycle is a loop. What you learn in production re-enters at
+`debugging-and-error-recovery` or `requirements-gathering`.
 
 - **`deployment`** (→ release-engineer) — ship safely with rollout, smoke check, and rollback.
+- **`operations`** (→ sre) — run the live service: observability/SLOs, incident
+  response, runbooks, and continuity. Routes learnings back into the loop.
 - **`documentation`** (→ technical-writer) — document what actually shipped.
-- **`maintenance`** (→ maintainer) — remove dead code and simplify without changing behavior.
+- **`maintenance`** (→ maintainer) — fix, simplify, and reduce debt without changing behavior.
+
+## Cross-cutting concerns
+
+Some concerns run *through* the phases, not as a single step — build them in, don't inspect them in
+at the end:
+
+- **Quality** — the engineer writes the code's tests test-first; the `tester` adds adversarial
+  tests; the `quality-engineer` assures V&V, reviews, and quality attributes.
+- **Security** — threats in requirements, least-privilege in design, `security-and-hardening` in
+  construction, attacked in testing. Not a final checklist.
+- **Traceability** — give each requirement a stable ID and carry it into design, tasks, and tests
+  so the link stays greppable.
+- **Visual verification** — for any UI change, the `graphic-designer` LOOKs at the rendered result;
+  the screenshot is the test.
 
 ## On-ramps
 
@@ -44,23 +63,15 @@ Situations that start mid-pipeline rather than at the top:
   `implementation` to fix it test-first (write a regression test first).
 - **A performance problem** → `performance-optimization` (measure → fix → guard).
 - **A security concern** → `security-and-hardening`.
+- **A UI / visual change** → `visual-design` (design and verify the rendered result).
 - **Messy but working code** → `maintenance`.
 
 ## Standalone / user-invoked
 
 Reach for these directly, off the pipeline:
 
-- **`grill`** — relentless interview to stress-test any plan or design (the base interview the
+- **`design-review`** — relentless interview to stress-test any plan or design (the base interview the
   requirements phase builds on).
-- **`grill-with-docs`** — same interview, but challenges the plan against the project's documented
+- **`design-review-with-docs`** — same interview, but challenges the plan against the project's documented
   domain model and updates `CONTEXT.md` / ADRs inline.
 - **`deslop`** — strip AI-generated slop from a recent change.
-
-## Context hygiene
-
-- Keep the early phases (requirements → planning → design) in **one context window** so each builds
-  on the same thinking.
-- Each phase declares **`context: fork`**, so it executes in a fresh **fork context** — the main
-  thread coordinates and never implements.
-- Start a **fresh context per implementation unit**: independent slices don't need each other's
-  history, and a clean window reasons more sharply.

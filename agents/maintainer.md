@@ -1,7 +1,7 @@
 ---
 name: maintainer
 description: "Maintenance specialist — removes dead code, simplifies, and reduces complexity without changing behavior. Use for cleanup and refactors."
-model: inherit # cheap/mechanical tier — let the harness resolve the tier; never hard-code a model ID
+model: inherit # let the harness resolve the model; never hard-code a model ID
 color: cyan
 skills:
   - deslop

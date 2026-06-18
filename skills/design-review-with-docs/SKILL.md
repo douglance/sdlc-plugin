@@ -1,12 +1,12 @@
 ---
-name: grill-with-docs
-description: Grilling session that challenges your plan against the existing domain model, sharpens terminology, and updates documentation (CONTEXT.md, ADRs) inline as decisions crystallise. Use when you want terminology sharpened and project docs updated while you defend a design against its documented domain model.
+name: design-review-with-docs
+description: Design-review session that challenges your plan against the existing domain model, sharpens terminology, and updates documentation (CONTEXT.md, ADRs) inline as decisions crystallise. Use when you want terminology sharpened and project docs updated while you defend a design against its documented domain model.
 user-invocable: true
 ---
 
 <what-to-do>
 
-Run the relentless interview from the `grill` skill — one question at a time, a recommended answer for each, exploring the codebase instead of asking when you can.
+Run the relentless interview from the `design-review` skill — one question at a time, a recommended answer for each, exploring the codebase instead of asking when you can.
 
 The addition here: challenge the plan against the project's documented domain model, sharpen its terminology, and update the docs inline as decisions crystallise (see below).
 

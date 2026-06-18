@@ -5,10 +5,6 @@ description: Optimizes application performance. Use when performance requirement
 
 # Performance Optimization
 
-## Overview
-
-Measure before optimizing. Performance work without measurement is guessing — and guessing leads to premature optimization that adds complexity without improving what matters. Profile first, identify the actual bottleneck, fix it, measure again. Optimize only what measurements prove matters.
-
 ## When to Use
 
 - Performance requirements exist in the spec (load time budgets, response time SLAs)
@@ -17,7 +13,7 @@ Measure before optimizing. Performance work without measurement is guessing — 
 - You suspect a change introduced a regression
 - Building features that handle large datasets or high traffic
 
-**When NOT to use:** Don't optimize before you have evidence of a problem. Premature optimization adds complexity that costs more than the performance it gains.
+**When NOT to use:** Don't optimize before you have evidence of a problem.
 
 ## Core Web Vitals Targets
 
@@ -247,26 +243,6 @@ npx bundlesize --config bundlesize.config.json
 # Lighthouse CI
 npx lhci autorun
 ```
-
-## Common Rationalizations
-
-| Rationalization | Reality |
-|---|---|
-| "We'll optimize later" | Performance debt compounds. Fix obvious anti-patterns now, defer micro-optimizations. |
-| "It's fast on my machine" | Your machine isn't the user's. Profile on representative hardware and networks. |
-| "This optimization is obvious" | If you didn't measure, you don't know. Profile first. |
-| "Users won't notice 100ms" | Research shows 100ms delays impact conversion rates. Users notice more than you think. |
-| "The framework handles performance" | Frameworks prevent some issues but can't fix N+1 queries or oversized bundles. |
-
-## Red Flags
-
-- Optimization without profiling data to justify it
-- N+1 query patterns in data fetching
-- List endpoints without pagination
-- Images without dimensions, lazy loading, or responsive sizes
-- Bundle size growing without review
-- No performance monitoring in production
-- `React.memo` and `useMemo` everywhere (overusing is as bad as underusing)
 
 ## Verification
 

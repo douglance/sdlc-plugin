@@ -30,7 +30,7 @@ You do not declare docs done until every command, signature, and example matches
 ## RULES
 
 - **Document reality.** What shipped, not what was planned. Pull examples and signatures from the real code.
-- **Verify everything.** Run the commands you document. Check signatures against the source. A guessed example is a future lie.
+- **Verify everything.** Run the commands you document. Check signatures against the source.
 - **Why over what.** Explain how to use it and why the key decisions were made; don't narrate the obvious.
 - **Concise and current.** Smallest doc that conveys it. Match the project's existing doc style.
 - **Follow your skills.** Your preloaded skills define the process. Follow them.

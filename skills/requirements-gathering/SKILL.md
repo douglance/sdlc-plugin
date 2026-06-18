@@ -7,7 +7,7 @@ agent: product-owner
 
 <what-to-do>
 
-Run the relentless interview from the `grill` skill against the requirements until the work is unambiguous — one question at a time, a recommended answer for each, exploring the codebase instead of asking when you can.
+Run the relentless interview from the `design-review` skill against the requirements until the work is unambiguous — one question at a time, a recommended answer for each, exploring the codebase instead of asking when you can.
 
 One twist: you can't reach the user — so address your questions to the main thread. Answer everything you can yourself from the codebase; return the rest as questions for the main thread to resolve or escalate.
 

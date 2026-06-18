@@ -2,7 +2,7 @@
 name: visual-design
 description: Start here for user-facing UI/visual work — layout, visual hierarchy, composition, states, and accessibility — and to verify a rendered change actually looks right.
 context: fork
-agent: visual-designer
+agent: graphic-designer
 ---
 
 <what-to-do>

@@ -5,10 +5,6 @@ description: Hardens code against vulnerabilities. Use when handling user input,
 
 # Security and Hardening
 
-## Overview
-
-Security-first development practices for web applications. Treat every external input as hostile, every secret as sacred, and every authorization check as mandatory. Security isn't a phase — it's a constraint on every line of code that touches user data, authentication, or external systems.
-
 ## When to Use
 
 - Building anything that accepts user input
@@ -109,8 +105,6 @@ function validateUpload(file: UploadedFile) {
 
 ## Triaging npm audit Results
 
-Not all audit findings require immediate action. Use this decision tree:
-
 ```
 npm audit reports a vulnerability
 ├── Severity: critical or high
@@ -206,26 +200,6 @@ git diff --cached | grep -i "password\|secret\|api_key\|token"
 - [ ] Dependencies audited for vulnerabilities
 - [ ] Error messages don't expose internals
 ```
-
-## Common Rationalizations
-
-| Rationalization | Reality |
-|---|---|
-| "This is an internal tool, security doesn't matter" | Internal tools get compromised. Attackers target the weakest link. |
-| "We'll add security later" | Security retrofitting is 10x harder than building it in. Add it now. |
-| "No one would try to exploit this" | Automated scanners will find it. Security by obscurity is not security. |
-| "The framework handles security" | Frameworks provide tools, not guarantees. You still need to use them correctly. |
-| "It's just a prototype" | Prototypes become production. Security habits from day one. |
-
-## Red Flags
-
-- User input passed directly to database queries, shell commands, or HTML rendering
-- Secrets in source code or commit history
-- API endpoints without authentication or authorization checks
-- Missing CORS configuration or wildcard (`*`) origins
-- No rate limiting on authentication endpoints
-- Stack traces or internal errors exposed to users
-- Dependencies with known critical vulnerabilities
 
 ## Verification
 

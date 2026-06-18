@@ -5,10 +5,6 @@ description: Drives development with tests. Use when implementing any logic, fix
 
 # Test-Driven Development
 
-## Overview
-
-Write a failing test before writing the code that makes it pass. For bug fixes, reproduce the bug with a test before attempting a fix. Tests are proof — "seems right" is not done. A codebase with good tests is an AI agent's superpower; a codebase without tests is a liability.
-
 ## When to Use
 
 - Implementing any new logic or behavior
@@ -144,11 +140,9 @@ Invest testing effort according to the pyramid — most tests should be small an
  ╱──────────────────╲
 ```
 
-**The Beyonce Rule:** If you liked it, you should have put a test on it. Infrastructure changes, refactoring, and migrations are not responsible for catching your bugs — your tests are. If a change breaks your code and you didn't have a test for it, that's on you.
-
 ### Test Sizes (Resource Model)
 
-Beyond the pyramid levels, classify tests by what resources they consume:
+Classify tests by what resources they consume:
 
 | Size | Constraints | Speed | Example |
 |------|------------|-------|---------|
@@ -156,7 +150,7 @@ Beyond the pyramid levels, classify tests by what resources they consume:
 | **Medium** | Multi-process OK, localhost only, no external services | Seconds | API tests with test DB, component tests |
 | **Large** | Multi-machine OK, external services allowed | Minutes | E2E tests, performance benchmarks, staging integration |
 
-Small tests should make up the vast majority of your suite. They're fast, reliable, and easy to debug when they fail.
+Small tests should make up the vast majority of your suite.
 
 ### Decision Guide
 
@@ -326,27 +320,6 @@ then verifies the test passes.
 ```
 
 This separation ensures the test is written without knowledge of the fix, making it more robust.
-
-## Common Rationalizations
-
-| Rationalization | Reality |
-|---|---|
-| "I'll write tests after the code works" | You won't. And tests written after the fact test implementation, not behavior. |
-| "This is too simple to test" | Simple code gets complicated. The test documents the expected behavior. |
-| "Tests slow me down" | Tests slow you down now. They speed you up every time you change the code later. |
-| "I tested it manually" | Manual testing doesn't persist. Tomorrow's change might break it with no way to know. |
-| "The code is self-explanatory" | Tests ARE the specification. They document what the code should do, not what it does. |
-| "It's just a prototype" | Prototypes become production code. Tests from day one prevent the "test debt" crisis. |
-
-## Red Flags
-
-- Writing code without any corresponding tests
-- Tests that pass on the first run (they may not be testing what you think)
-- "All tests pass" but no tests were actually run
-- Bug fixes without reproduction tests
-- Tests that test framework behavior instead of application behavior
-- Test names that don't describe the expected behavior
-- Skipping tests to make the suite pass
 
 ## Verification
 
