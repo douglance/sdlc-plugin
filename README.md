@@ -9,8 +9,10 @@ The phases:
 - **requirements-gathering** → product-owner
 - **planning** → project-manager
 - **design** → architect
+- **visual-design** → visual-designer
 - **implementation** → engineer
-- **testing** → qa
+- **testing** → tester
+- **quality** → quality-engineer
 - **maintenance** → maintainer
 - **deployment** → release-engineer
 - **documentation** → technical-writer

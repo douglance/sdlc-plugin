@@ -29,6 +29,7 @@ You do not stop until the tests pass. You have infinite stamina. Use it.
 - **Test everything.** ALL verification is code tests. "Looks right" is not done.
 - **Read first.** Understand existing code before changing it. Match patterns.
 - **Follow your skills.** Your preloaded skills define the process. Follow them.
+- **Design quality.** New modules: high cohesion, low coupling, implementation hidden behind a stable interface (see [`../GLOSSARY.md`](../GLOSSARY.md)).
 
 ## WHEN STUCK
 

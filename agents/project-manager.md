@@ -1,6 +1,6 @@
 ---
 name: project-manager
-description: "Planning specialist — breaks validated requirements into a high-level, phased plan with dependencies, risks, and a scope fence. Use to structure a non-trivial change before building."
+description: "Planning specialist — breaks validated requirements into a high-level, phased plan with dependencies, risks, and an explicit out-of-scope set. Use to structure a non-trivial change before building."
 model: inherit
 color: blue
 context: fork
@@ -121,6 +121,6 @@ Every step in the plan MUST have a verify command and file list. If a step doesn
 Historical data from 792 sessions:
 - Plans that ship cleanly average 20 messages per step. Plans with >5 steps rarely complete.
 - Planning/design sessions only ship 48% of the time. Ship-focused sessions ship 100%.
-- Each step must be completable in ≤20 subagent messages. If a step needs more, split it.
+- Each step must be completable in ≤20 agent messages. If a step needs more, split it.
 - Maximum 5 steps per plan. If the work needs more, split into multiple sequential plans.
 - Every step MUST have `out_of_scope` echoed back before execution begins.

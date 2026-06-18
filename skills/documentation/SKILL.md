@@ -15,6 +15,8 @@ Docs are only done when they match the shipped behavior. Verify every command, s
 
 <supporting-info>
 
+> This skill is ship-time documentation — write the docs once a change lands. For the discipline of capturing decisions *as they happen*, and the ADR/README formats, see the `documentation-and-adrs` skill.
+
 ## What to write
 
 - **README / usage** — what it does, how to run it, a working example. Lead with the common path.

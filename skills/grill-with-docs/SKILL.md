@@ -6,11 +6,9 @@ user-invocable: true
 
 <what-to-do>
 
-Interview me relentlessly about every aspect of this plan until we reach a shared understanding. Walk down each branch of the design tree, resolving dependencies between decisions one-by-one. For each question, provide your recommended answer.
+Run the relentless interview from the `grill` skill — one question at a time, a recommended answer for each, exploring the codebase instead of asking when you can.
 
-Ask the questions one at a time, waiting for feedback on each question before continuing.
-
-If a question can be answered by exploring the codebase, explore the codebase instead.
+The addition here: challenge the plan against the project's documented domain model, sharpen its terminology, and update the docs inline as decisions crystallise (see below).
 
 </what-to-do>
 

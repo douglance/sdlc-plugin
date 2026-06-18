@@ -137,7 +137,7 @@ Ask: "Why does this happen?" until you reach the actual cause, not just where it
 
 ### Step 5: Guard Against Recurrence
 
-Write a test that catches this specific failure:
+Write a **regression test** that catches this specific failure (write it first, so it reproduces the bug):
 
 ```typescript
 // The bug: task titles with special characters broke the search

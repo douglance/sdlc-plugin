@@ -19,7 +19,7 @@ Prefer deletion over rewriting. Make the smallest diff. If a cut alters behavior
 
 - **Dead code** — unused functions, exports, branches, variables.
 - **Duplication** — repeated logic that can collapse.
-- **Needless indirection** — layers and abstractions that earn nothing.
+- **Needless indirection** — layers and abstractions that earn nothing: indirection that adds **coupling** without improving **cohesion** or hiding a decision.
 - **Over-configuration** — options and flexibility nobody uses.
 
 ## The rule

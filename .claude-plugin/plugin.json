@@ -1,6 +1,6 @@
 {
   "name": "sdlc",
-  "description": "Skill-centric SDLC. Each software lifecycle phase is a skill that routes to a specialized subagent: feasibility-analysis, requirements-gathering, planning, design, implementation, testing, maintenance, deployment, documentation.",
+  "description": "Skill-centric SDLC. Each software lifecycle phase is a skill that routes to a specialized subagent: feasibility-analysis, requirements-gathering, planning, design, visual-design, implementation, testing, quality, maintenance, deployment, documentation.",
   "version": "0.3.0",
   "author": { "name": "Doug Lance" },
   "keywords": ["sdlc", "agents", "skills", "workflow"]

@@ -56,15 +56,7 @@ Implementation order follows the dependency graph bottom-up: build foundations f
 
 ### Step 3: Slice Vertically
 
-Instead of building all the database, then all the API, then all the UI — build one complete feature path at a time:
-
-**Bad (horizontal slicing):**
-```
-Task 1: Build entire database schema
-Task 2: Build all API endpoints
-Task 3: Build all UI components
-Task 4: Connect everything
-```
+Break work into **vertical slices** — one complete feature path through every layer at a time, not all-DB-then-all-API-then-all-UI. See [`../../GLOSSARY.md`](../../GLOSSARY.md) for the definition and the `incremental-implementation` skill for the full treatment (contract-first and risk-first variants included).
 
 **Good (vertical slicing):**
 ```
@@ -74,7 +66,7 @@ Task 3: User can create a task (task schema + API + UI for creation)
 Task 4: User can view task list (query + API + UI for list view)
 ```
 
-Each vertical slice delivers working, testable functionality.
+Each slice delivers working, testable functionality and becomes one or more tasks below.
 
 ### Step 4: Write Tasks
 

@@ -7,17 +7,21 @@ description: Guides stable API and interface design. Use when designing APIs, mo
 
 ## Overview
 
-Design stable, well-documented interfaces that are hard to misuse. Good interfaces make the right thing easy and the wrong thing hard. This applies to REST APIs, GraphQL schemas, module boundaries, component props, and any surface where one piece of code talks to another.
+Design stable, well-documented interfaces that are hard to misuse. Good interfaces make the right thing easy and the wrong thing hard. This applies to REST APIs, GraphQL schemas, module interfaces, component props, and any surface where one piece of code talks to another.
 
 ## When to Use
 
 - Designing new API endpoints
-- Defining module boundaries or contracts between teams
+- Defining module interfaces or contracts between teams
 - Creating component prop interfaces
 - Establishing database schema that informs API shape
 - Changing existing public interfaces
 
 ## Core Principles
+
+### Design Quality
+
+A good interface maximizes **information hiding**: it exposes essential behavior (**abstraction**) and hides the decisions likely to change behind the interface (**encapsulation**). The result is **high cohesion** (the module does one thing) and **low coupling** (callers depend on the interface, never the internals). These are the canonical goals every pattern below serves — definitions in [`../../GLOSSARY.md`](../../GLOSSARY.md).
 
 ### Hyrum's Law
 
@@ -26,7 +30,7 @@ Design stable, well-documented interfaces that are hard to misuse. Good interfac
 This means: every public behavior — including undocumented quirks, error message text, timing, and ordering — becomes a de facto contract once users depend on it. Design implications:
 
 - **Be intentional about what you expose.** Every observable behavior is a potential commitment.
-- **Don't leak implementation details.** If users can observe it, they will depend on it.
+- **Don't leak implementation details.** If users can observe it, they will depend on it — strong **information hiding** keeps your internals free to change.
 - **Plan for deprecation at design time.** See `deprecation-and-migration` for how to safely remove things users depend on.
 - **Tests are not enough.** Even with perfect contract tests, Hyrum's Law means "safe" changes can break real users who depend on undocumented behavior.
 

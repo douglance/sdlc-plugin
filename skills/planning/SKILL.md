@@ -1,6 +1,6 @@
 ---
 name: planning
-description: Start here to structure a non-trivial change into a high-level, phased plan with dependencies, risks, and an explicit scope fence.
+description: Start here to structure a non-trivial change into a high-level, phased plan with dependencies, risks, and an explicit out-of-scope boundary.
 context: fork
 agent: project-manager
 ---
@@ -20,7 +20,7 @@ Stay high-level — leave exact files, signatures, and verify commands out. Ship
 - **Phases** — a handful of ordered steps (aim for ≤5), each a meaningful unit of work.
 - **Dependencies** — what each phase needs from the others.
 - **Risks** — what could go wrong, what's hard to reverse.
-- **Scope fence** — an explicit `out_of_scope` list. This is a hard boundary, not a suggestion. You own it: every downstream phase inherits it verbatim.
+- **Out-of-scope set** — an explicit `out_of_scope` list. This is a hard constraint, not a suggestion. You own it: every downstream phase inherits it verbatim.
 
 ## Principles
 

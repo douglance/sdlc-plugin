@@ -90,6 +90,9 @@ Don't silently fill in ambiguous requirements. The spec's entire purpose is to s
 ## Tech Stack
 [Framework, language, key dependencies with versions]
 
+## Nonfunctional Requirements
+[Measurable quality-of-service targets — performance, reliability, security, scalability]
+
 ## Commands
 [Build, test, lint, dev — full commands]
 
@@ -156,6 +159,7 @@ Break the plan into discrete, implementable tasks:
   - Acceptance: [What must be true when done]
   - Verify: [How to confirm — test command, build, manual check]
   - Files: [Which files will be touched]
+  - Traces: [Requirement IDs this task implements]
 ```
 
 ### Phase 4: Implement

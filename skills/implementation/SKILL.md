@@ -26,5 +26,6 @@ Make the smallest diff that meets the requirement. Touch only what the task dema
 - Incremental over big-bang — small, verified steps.
 - Smallest diff that solves the problem; no refactoring of unbroken code.
 - Match the surrounding code's style and idioms.
+- The code's own tests are yours — write them test-first. The `tester` adds adversarial tests later, never instead of these.
 
 </supporting-info>
