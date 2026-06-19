@@ -1,0 +1,11 @@
+{
+  "name": "sdlc",
+  "version": "0.3.0",
+  "description": "Skill-centric SDLC. Each software lifecycle phase is a skill: feasibility-analysis, requirements-gathering, planning, design, visual-design, implementation, testing, quality, maintenance, deployment, operations, documentation.",
+  "author": { "name": "Doug Lance" },
+  "homepage": "https://github.com/douglance/sdlc-plugin",
+  "repository": "https://github.com/douglance/sdlc-plugin",
+  "license": "MIT",
+  "keywords": ["sdlc", "skills", "workflow"],
+  "skills": "./skills/"
+}

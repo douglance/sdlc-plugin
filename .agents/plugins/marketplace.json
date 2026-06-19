@@ -1,0 +1,19 @@
+{
+  "name": "sdlc-marketplace",
+  "interface": {
+    "displayName": "SDLC"
+  },
+  "plugins": [
+    {
+      "name": "sdlc",
+      "source": {
+        "source": "local",
+        "path": "./plugins/sdlc"
+      },
+      "policy": {
+        "installation": "AVAILABLE"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

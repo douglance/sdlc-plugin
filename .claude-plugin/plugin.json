@@ -6,5 +6,6 @@
   "homepage": "https://github.com/douglance/sdlc-plugin",
   "repository": "https://github.com/douglance/sdlc-plugin",
   "license": "MIT",
-  "keywords": ["sdlc", "agents", "skills", "workflow"]
+  "keywords": ["sdlc", "agents", "skills", "workflow"],
+  "skills": "./plugins/sdlc/skills/"
 }

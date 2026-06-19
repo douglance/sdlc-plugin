@@ -20,21 +20,33 @@ The phases:
 
 ## Install
 
-This repo is both a plugin and a single-plugin marketplace (`.claude-plugin/marketplace.json`),
-so it installs without a remote. Run from anywhere:
+This repo doubles as a marketplace for **both** Claude Code and Codex CLI. The skills
+live once, at `plugins/sdlc/skills/`; each toolchain's manifest points at them.
+
+### Claude Code
 
 ```bash
-# Register this directory as a marketplace, then install the plugin (persists across sessions)
-claude plugin marketplace add /Users/douglance/.claude/sdlc-plugin
+claude plugin marketplace add douglance/sdlc-plugin
 claude plugin install sdlc@sdlc-marketplace
 ```
 
-Or load it for the current session only, no install:
+Or load it for one session only: `claude --plugin-dir <repo-path>`.
+Manage with `claude plugin list | disable sdlc | update sdlc`.
+
+### Codex CLI
 
 ```bash
-claude --plugin-dir /Users/douglance/.claude/sdlc-plugin
+codex plugin marketplace add douglance/sdlc-plugin
+codex plugin add sdlc@sdlc-marketplace
 ```
 
-Manage it with `claude plugin list`, `claude plugin disable sdlc`, `claude plugin update sdlc`.
+Manage with `codex plugin list | remove sdlc`.
 
-It is self-contained: it depends only on the harness, not on any private machine config.
+Both forms also accept a local path instead of `douglance/sdlc-plugin`.
+
+## What ports to Codex
+
+The 26 lifecycle **skills** install and trigger by description on both toolchains.
+The **agents** (`agents/*.md`) and the skill→subagent auto-routing (`context: fork` /
+`agent:` frontmatter) are Claude Code features — Codex reads the skills as
+description-triggered guidance, and spawns subagents only when explicitly asked.
