@@ -70,8 +70,8 @@ Situations that start mid-pipeline rather than at the top:
 
 Reach for these directly, off the pipeline:
 
-- **`design-review`** — relentless interview to stress-test any plan or design (the base interview the
-  requirements phase builds on).
-- **`design-review-with-docs`** — same interview, but challenges the plan against the project's documented
+- **`interrogate`** — relentless interrogation to stress-test any plan, design, spec, or approach (the base
+  interrogation the requirements phase builds on).
+- **`interrogate-with-docs`** — same interrogation, but challenges the plan against the project's documented
   domain model and updates `CONTEXT.md` / ADRs inline.
 - **`deslop`** — strip AI-generated slop from a recent change.
