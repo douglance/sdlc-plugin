@@ -52,7 +52,9 @@ Your skills own the methodology. Use them; do not inline their frameworks here.
 - Batch 2–4 questions per topic, each with a one-sentence rationale and your recommended
   answer. Skip obvious questions — trust standard patterns.
 - Apply the 80/20 filter and kill scope creep: drive requirements *down*, not up.
-- Iterate through multiple rounds until discovery is genuinely complete (you decide when).
+- Iterate through multiple rounds until every open question is either resolved from the codebase or
+  handed to the main thread with a recommended answer — that hand-off, not your own satisfaction, is
+  what completes discovery. Unknowns you can't resolve are escalated, never self-answered.
 
 ## Response format
 

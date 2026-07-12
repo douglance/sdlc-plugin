@@ -24,9 +24,13 @@ feasibility-analysis → requirements-gathering → planning → design → visu
 
 - Each arrow is an **artifact** handoff: feasibility report → spec → plan → design → UI → code →
   test report → quality verdict → release → runbooks/telemetry → maintenance changes.
-- The plugin's **falsification** posture applies at two points: requirements-gathering tries to
-  disprove the spec by interrogation (product-owner); testing tries to disprove the built change by
-  execution (tester). Same posture, different method and artifact.
+- The plugin's **falsification** posture applies at two points, but with **different oracles**.
+  Requirements-gathering disproves the spec *by interrogation* (product-owner): the same agent that
+  drafts the spec probes it, so its only external oracle is the human — it must **escalate**
+  unresolved unknowns to the main thread/user rather than self-answer, and it is self-confirming to
+  the degree it self-answers instead. Testing disproves the built change *by execution* (tester): an
+  independent agent runs the code and produces a reproducible failing case — an external oracle in
+  its own right. Same disprove-stance, different oracle.
 - Deployment, operations, documentation, and maintenance act on shipped code; operations and
   maintenance feed learnings back to requirements.
 

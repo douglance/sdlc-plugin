@@ -56,9 +56,13 @@ Requirements and correctness are hypotheses to *disprove*, not confirm.
 
 # Requirements tries to **break the spec** — before anything is built.
 
+By *interrogation* — and it escalates what it can't resolve to a human.
+
 ---
 
 # Testing tries to **break the change** — before it ships.
+
+By *execution* — a reproducible failing case.
 
 ---
 

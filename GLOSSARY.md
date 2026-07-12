@@ -146,7 +146,10 @@ thread coordinates and the fork executes.
 echoed into every dispatch as a hard prohibition.
 
 **Falsification** — the plugin's house stance for `product-owner` and `tester`: treat every requirement
-or claim of correctness as a hypothesis to *disprove*, not confirm.
+or claim of correctness as a hypothesis to *disprove*, not confirm. Same stance, different **oracle**:
+`product-owner` falsifies requirements *by interrogation*, escalating what it can't resolve from the
+codebase to the human (its external oracle); `tester` falsifies correctness *by execution*, producing
+a reproducible failing case (an oracle in its own right).
 
 **Always / Ask-First / Never** — the plugin's three-tier rule for risky actions. *Always*: safe, do
 it. *Ask-First*: irreversible/high-blast-radius/destructive — confirm first. *Never*: prohibited.
