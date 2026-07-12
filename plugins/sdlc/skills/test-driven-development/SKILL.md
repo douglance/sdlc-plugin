@@ -30,10 +30,13 @@ description: Drives development with tests. Use when implementing any logic, fix
 
 ### Step 1: RED — Write a Failing Test
 
-Write the test first. It must fail. A test that passes immediately proves nothing.
+Write the test first. It must fail. A test that passes immediately proves nothing. RED also requires observing the test fail **on its assertion, for the reason you expect** — not merely that the test errors.
+
+A test that fails only because a symbol/import is missing or the code doesn't compile is a **weak RED**: the assertion never ran, so it proves nothing about the behavior. Strong RED = the code exists and compiles, and the assertion fails because the behavior is wrong.
 
 ```typescript
-// RED: This test fails because createTask doesn't exist yet
+// Weak RED: fails only because createTask doesn't exist yet — the assertion never ran.
+// Strong RED: once createTask compiles, the assertion below fails because the behavior is wrong.
 describe('TaskService', () => {
   it('creates a task with title and default status', async () => {
     const task = await taskService.createTask({ title: 'Buy groceries' });
