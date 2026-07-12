@@ -18,7 +18,7 @@ Run these in order; each one's output is the next one's input. Skip any phase th
    the approach is unknown. Produces options, constraints, and trade-offs.
 2. **`requirements-gathering`** (→ product-owner) — turn a vague or high-blast-radius request into
    a falsified spec. Start here when *what* to build is unclear. Produces a scoped spec.
-3. **`planning`** (→ project-manager) — break the spec into a phased plan with dependencies, risks,
+3. **`planning`** (→ project-manager) — break the spec into a plan of milestones with dependencies, risks,
    and an explicit out-of-scope set. Produces a plan.
 4. **`design`** (→ architect) — settle interfaces, contracts, exact files, and trade-offs.
    Produces a technical design. For user-facing work, pair with **`visual-design`** (→ graphic-designer)

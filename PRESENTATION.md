@@ -84,7 +84,7 @@ feasibility → requirements → planning → design → visual design
 |---|---|---|
 | feasibility | researcher | options, constraints, trade-offs |
 | requirements | product owner | a scoped, interrogated spec |
-| planning | planner | a phased plan with dependencies |
+| planning | planner | a plan of milestones with dependencies |
 | design | architect | interfaces, contracts, structure |
 | visual design | designer | layout, states, accessibility |
 | building | engineer | working, tested code |

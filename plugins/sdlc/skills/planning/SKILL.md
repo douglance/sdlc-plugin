@@ -1,13 +1,13 @@
 ---
 name: planning
-description: Start here to structure a non-trivial change into a high-level, phased plan with dependencies, risks, and an explicit out-of-scope boundary.
+description: Start here to structure a non-trivial change into a high-level plan of milestones with dependencies, risks, and an explicit out-of-scope boundary.
 context: fork
 agent: project-manager
 ---
 
 <what-to-do>
 
-Turn the goal into structure. Gather enough codebase context to understand the terrain, then break the work into a small number of high-level phases.
+Turn the goal into structure. Gather enough codebase context to understand the terrain, then break the work into a series of high-level milestones, each composed of commits.
 
 Stay high-level — leave exact files, signatures, and verify commands out. Ship the plan after the first draft; iterate during execution, not during planning.
 
