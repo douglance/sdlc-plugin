@@ -80,7 +80,7 @@ Each task follows this structure:
 **Verification:**
 - [ ] Tests pass: `npm test -- --grep "feature-name"`
 - [ ] Build succeeds: `npm run build`
-- [ ] Manual check: [description of what to verify]
+- [ ] Observe: [drive the flow / screenshot the rendered result / the specific output to eyeball]
 
 **Dependencies:** [Task numbers this depends on, or "None"]
 
@@ -106,8 +106,8 @@ Add explicit checkpoints:
 ## Checkpoint: After Tasks 1-3
 - [ ] All tests pass
 - [ ] Application builds without errors
-- [ ] Core user flow works end-to-end
-- [ ] Review with human before proceeding
+- [ ] Core user flow exercised end-to-end — the command that drives it passes, or drive it manually and screenshot the result
+- [ ] Human sign-off: a person other than the agent has reviewed and approved proceeding (the agent cannot tick this itself)
 ```
 
 ## Task Sizing Guidelines
@@ -153,15 +153,15 @@ One commit = one logical change (~100 lines — see `git-workflow-and-versioning
 - [ ] Commit 4: ...
 
 ### Checkpoint: Core Features
-- [ ] End-to-end flow works
+- [ ] End-to-end flow exercised — the command that drives it passes (or drive it and screenshot)
 
 ### Milestone 3: Polish
 - [ ] Commit 5: ...
 - [ ] Commit 6: ...
 
 ### Checkpoint: Complete
-- [ ] All acceptance criteria met
-- [ ] Ready for review
+- [ ] Each acceptance criterion checked against its verification command or observation
+- [ ] Human sign-off obtained before review (external approval — the agent cannot tick this itself)
 
 ## Risks and Mitigations
 | Risk | Impact | Mitigation |
@@ -188,4 +188,4 @@ Before starting implementation, confirm:
 - [ ] Every task has a verification step
 - [ ] Task dependencies are identified and ordered correctly
 - [ ] Checkpoints exist between milestones
-- [ ] The human has reviewed and approved the plan
+- [ ] A human other than the agent has reviewed and approved the plan (external sign-off — the agent cannot tick this itself)

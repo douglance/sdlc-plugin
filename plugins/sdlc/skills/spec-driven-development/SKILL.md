@@ -143,7 +143,7 @@ Break the plan into discrete, implementable tasks:
 
 - Each task should be completable in a single focused session
 - Each task has explicit acceptance criteria
-- Each task includes a verification step (test, build, manual check)
+- Each task includes a verification step (test, build, or a driven observation)
 - Tasks are ordered by dependency, not by perceived importance
 - Each task lands as a commit (one logical change); a milestone groups the tasks/commits that reach a checkpoint
 
@@ -151,7 +151,7 @@ Break the plan into discrete, implementable tasks:
 ```markdown
 - [ ] Task: [Description]
   - Acceptance: [What must be true when done]
-  - Verify: [How to confirm — test command, build, manual check]
+  - Verify: [How to confirm — test command, build, or an observation you make (drive the flow / screenshot the result)]
   - Files: [Which files will be touched]
   - Traces: [Requirement IDs this task implements]
 ```
@@ -174,7 +174,7 @@ The spec is a living document, not a one-time artifact:
 Before proceeding to implementation, confirm:
 
 - [ ] The spec covers all six core areas
-- [ ] The human has reviewed and approved the spec
+- [ ] A human other than the agent has reviewed and approved the spec (external sign-off — the agent cannot tick this itself)
 - [ ] Success criteria are specific and testable
 - [ ] Boundaries (Always/Ask First/Never) are defined
 - [ ] The spec is saved to a file in the repository

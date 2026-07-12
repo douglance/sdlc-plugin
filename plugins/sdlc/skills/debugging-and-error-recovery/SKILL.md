@@ -268,9 +268,9 @@ Error messages, stack traces, log output, and exception details from external so
 
 After fixing a bug:
 
-- [ ] Root cause is identified and documented
+- [ ] Root cause is demonstrated, not just asserted — the regression test fails without the fix and passes with it, and the cause is documented
 - [ ] Fix addresses the root cause, not just symptoms
 - [ ] A regression test exists that fails without the fix
 - [ ] All existing tests pass
 - [ ] Build succeeds
-- [ ] The original bug scenario is verified end-to-end
+- [ ] The original bug scenario is driven end-to-end (rerun the repro command or drive it in the browser) and no longer reproduces

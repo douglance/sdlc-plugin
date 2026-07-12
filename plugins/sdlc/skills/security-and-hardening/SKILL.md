@@ -180,8 +180,8 @@ git diff --cached | grep -i "password\|secret\|api_key\|token"
 - [ ] Password reset tokens expire
 
 ### Authorization
-- [ ] Every endpoint checks user permissions
-- [ ] Users can only access their own resources
+- [ ] Every endpoint's permission check is exercised — a test or request as an unauthorized user is denied (401/403), not just asserted
+- [ ] Cross-user access is proven denied — a test or request for another user's resource returns 403/404
 - [ ] Admin actions require admin role verification
 
 ### Input

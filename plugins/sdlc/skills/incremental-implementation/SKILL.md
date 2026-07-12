@@ -33,7 +33,7 @@ For each slice:
 
 1. **Implement** the smallest complete piece of functionality
 2. **Test** — run the test suite (or write a test if none exists)
-3. **Verify** — confirm the slice works as expected (tests pass, build succeeds, manual check)
+3. **Verify** — confirm the slice does what the increment intended (tests pass, build succeeds, drive it and observe the result)
 4. **Commit** -- save your progress with a descriptive message (see `git-workflow-and-versioning` for atomic commit guidance)
 5. **Move to the next slice** — carry forward, don't restart
 
@@ -201,7 +201,7 @@ After each increment, verify:
 - [ ] The build succeeds (`npm run build`)
 - [ ] Type checking passes (`npx tsc --noEmit`)
 - [ ] Linting passes (`npm run lint`)
-- [ ] The new functionality works as expected
+- [ ] The new functionality does what the increment intended — exercised via its test, or by driving the flow and observing the result
 - [ ] The change is committed with a descriptive message
 
 ## Verification
@@ -211,5 +211,5 @@ After completing all increments for a task:
 - [ ] Each increment was individually tested and committed
 - [ ] The full test suite passes
 - [ ] The build is clean
-- [ ] The feature works end-to-end as specified
+- [ ] The feature exercised end-to-end against the spec — an e2e test that passes, or driven and screenshotted
 - [ ] No uncommitted changes remain
