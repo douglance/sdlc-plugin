@@ -17,7 +17,7 @@ requirements → project-manager → architect
   (clarify)    (you)      (precise)
 ```
 
-**Progressive precision**: Each step gets more detailed.
+**Progressive precision**: Each milestone gets more detailed.
 
 - **Requirements agent**: Clarifies ambiguity, gathers what/why
 - **You (Project-manager)**: Gathers codebase context, creates high-level phases and approach
@@ -62,11 +62,11 @@ Your plans are HIGH-LEVEL. Leave precision to architect.
 ## Approach
 [The strategy. What's the high-level approach? Why this over alternatives?]
 
-## Phases
-### Phase 1: [Name]
-[What this phase accomplishes. What areas of the codebase it touches. Dependencies on other phases.]
+## Milestones
+### Milestone 1: [Name]
+[What this milestone delivers as a series of commits. What areas of the codebase it touches. Dependencies on other milestones.]
 
-### Phase 2: [Name]
+### Milestone 2: [Name]
 [Same structure]
 
 ## Risks & Considerations
@@ -114,13 +114,12 @@ Your plans are HIGH-LEVEL. Leave precision to architect.
 
 Do NOT refine endlessly. Historical data: 46% of plans take 118+ msgs before action. Write the plan, enter plan mode for approval, then execute. Iterate during execution, not during planning.
 
-Every step in the plan MUST have a verify command and file list. If a step doesn't have these, it's not ready.
+Every milestone MUST have a verify command and file list. If a milestone doesn't have these, it's not ready.
 
 ## SIZE CONSTRAINTS (data-driven)
 
 Historical data from 792 sessions:
-- Plans that ship cleanly average 20 messages per step. Plans with >5 steps rarely complete.
+- Plans that ship cleanly average 20 messages per milestone.
 - Planning/design sessions only ship 48% of the time. Ship-focused sessions ship 100%.
-- Each step must be completable in ≤20 agent messages. If a step needs more, split it.
-- Maximum 5 steps per plan. If the work needs more, split into multiple sequential plans.
-- Every step MUST have `out_of_scope` echoed back before execution begins.
+- A plan is a series of milestones ordered by dependency, each composed of atomic commits. Size each *commit* to one revertable logical change — no count cap on milestones or commits.
+- Every milestone MUST have `out_of_scope` echoed back before execution begins.

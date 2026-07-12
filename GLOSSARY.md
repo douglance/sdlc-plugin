@@ -26,6 +26,11 @@ the `incremental-implementation` skill.
 **Atomic commit** — a commit containing exactly one logical change, independently revertable, with a
 message describing why. Canonical guidance lives in `git-workflow-and-versioning`.
 
+**Milestone** — a checkpoint in a plan, composed of a series of atomic commits, reached when those
+commits exist and its verify command passes. The unit a plan is structured by; commits compose it.
+Replaces the phase/step *count* as the planning unit of measure. See **Vertical slice** and **Atomic
+commit**.
+
 **Nonfunctional requirement** (quality-of-service) — a requirement on *how well* the system behaves
 rather than what it does: performance, reliability, availability, security, usability, scalability.
 Stated as a measurable target, it drives architecture and test design.

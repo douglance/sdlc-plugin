@@ -145,7 +145,7 @@ Break the plan into discrete, implementable tasks:
 - Each task has explicit acceptance criteria
 - Each task includes a verification step (test, build, manual check)
 - Tasks are ordered by dependency, not by perceived importance
-- No task should require changing more than ~5 files
+- Each task lands as a commit (one logical change); a milestone groups the tasks/commits that reach a checkpoint
 
 **Task template:**
 ```markdown

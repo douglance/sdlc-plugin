@@ -118,9 +118,8 @@ Add explicit checkpoints:
 | **S** | 1-2 | One component or endpoint | Add a new API endpoint |
 | **M** | 3-5 | One feature slice | User registration flow |
 | **L** | 5-8 | Multi-component feature | Search with filtering and pagination |
-| **XL** | 8+ | **Too large — break it down further** | — |
 
-If a task is L or larger, it should be broken into smaller tasks. An agent performs best on S and M tasks.
+One commit = one logical change (~100 lines — see `git-workflow-and-versioning`); a milestone = the commits that reach one checkpoint. An agent performs best when each commit stays XS–M; if a task grows past that, split it into more commits.
 
 **When to break a task down further:**
 - It would take more than one focused session (roughly 2+ hours of agent work)
@@ -142,23 +141,23 @@ If a task is L or larger, it should be broken into smaller tasks. An agent perfo
 
 ## Task List
 
-### Phase 1: Foundation
-- [ ] Task 1: ...
-- [ ] Task 2: ...
+### Milestone 1: Foundation
+- [ ] Commit 1: ...
+- [ ] Commit 2: ...
 
 ### Checkpoint: Foundation
 - [ ] Tests pass, builds clean
 
-### Phase 2: Core Features
-- [ ] Task 3: ...
-- [ ] Task 4: ...
+### Milestone 2: Core Features
+- [ ] Commit 3: ...
+- [ ] Commit 4: ...
 
 ### Checkpoint: Core Features
 - [ ] End-to-end flow works
 
-### Phase 3: Polish
-- [ ] Task 5: ...
-- [ ] Task 6: ...
+### Milestone 3: Polish
+- [ ] Commit 5: ...
+- [ ] Commit 6: ...
 
 ### Checkpoint: Complete
 - [ ] All acceptance criteria met
@@ -188,6 +187,5 @@ Before starting implementation, confirm:
 - [ ] Every task has acceptance criteria
 - [ ] Every task has a verification step
 - [ ] Task dependencies are identified and ordered correctly
-- [ ] No task touches more than ~5 files
-- [ ] Checkpoints exist between major phases
+- [ ] Checkpoints exist between milestones
 - [ ] The human has reviewed and approved the plan

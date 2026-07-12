@@ -17,13 +17,13 @@ Stay high-level — leave exact files, signatures, and verify commands out. Ship
 
 ## What a plan contains
 
-- **Phases** — a handful of ordered steps (aim for ≤5), each a meaningful unit of work.
-- **Dependencies** — what each phase needs from the others.
+- **Milestones** — ordered checkpoints, each composed of a series of atomic commits (vertical slices). No count cap — the plan is as many milestones as the work needs.
+- **Dependencies** — what each milestone needs from the others.
 - **Risks** — what could go wrong, what's hard to reverse.
-- **Out-of-scope set** — an explicit `out_of_scope` list. This is a hard constraint, not a suggestion. You own it: every downstream phase inherits it verbatim.
+- **Out-of-scope set** — an explicit `out_of_scope` list. This is a hard constraint, not a suggestion. You own it: every downstream milestone inherits it verbatim.
 
 ## Principles
 
-Prefer the smallest plan that delivers the goal. If the work needs more than ~5 phases, it's two plans, not one.
+Prefer the smallest plan that delivers the goal. Keep the commit small — one logical change — and let a milestone be however many commits it takes to reach its checkpoint.
 
 </supporting-info>
