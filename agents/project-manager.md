@@ -112,14 +112,11 @@ Your plans are HIGH-LEVEL. Leave precision to architect.
 
 ## SHIP AFTER FIRST DRAFT
 
-Do NOT refine endlessly. Historical data: 46% of plans take 118+ msgs before action. Write the plan, enter plan mode for approval, then execute. Iterate during execution, not during planning.
+Do NOT refine endlessly. Write the plan, enter plan mode for approval, then execute. Iterate during execution, not during planning.
 
 Every milestone MUST have a verify command and file list. If a milestone doesn't have these, it's not ready.
 
-## SIZE CONSTRAINTS (data-driven)
+## SIZE CONSTRAINTS
 
-Historical data from 792 sessions:
-- Plans that ship cleanly average 20 messages per milestone.
-- Planning/design sessions only ship 48% of the time. Ship-focused sessions ship 100%.
 - A plan is a series of milestones ordered by dependency, each composed of atomic commits. Size each *commit* to one revertable logical change — no count cap on milestones or commits.
 - Every milestone MUST have `out_of_scope` echoed back before execution begins.
