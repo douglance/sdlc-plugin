@@ -30,8 +30,8 @@ The neutral source lives at `~/.agents/source/.rulesync/`. [Rulesync](https://gi
 ```text
 ~/.agents/source/.rulesync/
   subagents/  ------------------+--> .claude/agents/
-  skills/                      |--> .codex/agents/
-                               |--> .claude/skills/
+                               +--> .codex/agents/
+  skills/     ------------------+--> .claude/skills/
                                +--> .agents/skills/
 ```
 
