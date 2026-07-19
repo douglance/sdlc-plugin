@@ -1,27 +1,52 @@
 # SDLC Plugin
 
-A skill-centric software-delivery lifecycle. Each lifecycle phase is a skill that
-routes to a specialized subagent; the Claude Code harness orchestrates the subagents.
+A linear software-delivery lifecycle with specialized agents, reusable skills, and explicit artifact handoffs between phases. The phases intentionally overlap at their boundaries so context survives the transition.
 
-The phases:
+## Lifecycle
 
-- **feasibility-analysis** → researcher
-- **requirements-gathering** → product-owner
-- **planning** → project-manager
-- **design** → architect
-- **visual-design** → graphic-designer
-- **implementation** → engineer
-- **testing** → tester
-- **quality** → quality-engineer
-- **maintenance** → maintainer
-- **deployment** → release-engineer
-- **operations** → sre
-- **documentation** → technical-writer
+| Phase skill | Agent | Produces |
+| --- | --- | --- |
+| `feasibility-analysis` | `researcher` | options, constraints, and trade-offs |
+| `requirements-gathering` | `product-owner` | a falsified scoped specification |
+| `planning` | `project-manager` | milestones, dependencies, risks, and out-of-scope boundaries |
+| `design` | `architect` | interfaces, exact files, trade-offs, and verification contracts |
+| `visual-design` | `graphic-designer` | user-facing design and rendered evidence |
+| `implementation` | `engineer` | tested implementation |
+| `testing` | `tester` | an adversarial verdict and reproducible defects |
+| `quality` | `quality-engineer` | a verification-and-validation gate verdict |
+| `deployment` | `release-engineer` | deployed version, smoke evidence, and rollback path |
+| `operations` | `sre` | SLOs, runbooks, incidents, and lifecycle feedback |
+| `documentation` | `technical-writer` | documentation verified against shipped behavior |
+| `maintenance` | `maintainer` | behavior-preserving simplification |
+
+The package contains 12 agents and 29 skills. `actionable-communication` makes phase reports and handoffs immediately actionable. `find-simplifying-insight` searches for a falsifiable simpler model when a system has accumulated compensating rules and exceptions.
+
+Requirements, specifications, and plans must ground material arguments in concrete prior art: exact `path:line` repository citations, recorded searches when no analogue exists, and current primary sources for relevant external claims.
+
+## One source, native outputs
+
+The neutral source lives at `~/.agents/source/.rulesync/`. [Rulesync](https://github.com/dyoshikawa/rulesync) generates native provider layouts into this repository:
+
+```text
+~/.agents/source/.rulesync/
+  subagents/  ------------------+--> .claude/agents/
+  skills/                      |--> .codex/agents/
+                               |--> .claude/skills/
+                               +--> .agents/skills/
+```
+
+Regenerate and verify from the source directory:
+
+```bash
+cd ~/.agents/source
+pnpm install
+pnpm generate
+pnpm check
+```
+
+Do not hand-edit generated agent or skill files in this repository; edit the Rulesync source and regenerate.
 
 ## Install
-
-This repo doubles as a marketplace for **both** Claude Code and Codex CLI. The skills
-live once, at `plugins/sdlc/skills/`; each toolchain's manifest points at them.
 
 ### Claude Code
 
@@ -30,8 +55,7 @@ claude plugin marketplace add douglance/sdlc-plugin
 claude plugin install sdlc@sdlc-marketplace
 ```
 
-Or load it for one session only: `claude --plugin-dir <repo-path>`.
-Manage with `claude plugin list | disable sdlc | update sdlc`.
+Claude Code loads the packaged skills and agents. Phase skills use native `context: fork` and `agent:` routing.
 
 ### Codex CLI
 
@@ -40,13 +64,13 @@ codex plugin marketplace add douglance/sdlc-plugin
 codex plugin add sdlc@sdlc-marketplace
 ```
 
-Manage with `codex plugin list | remove sdlc`.
+Codex plugins install the 29 skills. Codex also supports first-class custom agents, but they are a separate user configuration surface; install the generated 12 agent TOMLs with:
 
-Both forms also accept a local path instead of `douglance/sdlc-plugin`.
+```bash
+cd ~/.agents/source
+pnpm install:codex-agents
+```
 
-## What ports to Codex
+## Attribution
 
-The 26 lifecycle **skills** install and trigger by description on both toolchains.
-The **agents** (`agents/*.md`) and the skill→subagent auto-routing (`context: fork` /
-`agent:` frontmatter) are Claude Code features — Codex reads the skills as
-description-triggered guidance, and spawns subagents only when explicitly asked.
+The actionable handoff discipline is adapted for SDLC work from [`ayghri/i-have-adhd`](https://github.com/ayghri/i-have-adhd), used under its MIT license. It is scoped to phase reports and handoffs rather than imposed as a global personality.

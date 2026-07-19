@@ -1,14 +1,15 @@
 {
   "name": "sdlc-marketplace",
   "interface": {
-    "displayName": "SDLC"
+    "displayName": "SDLC",
+    "shortDescription": "Linear delivery phases with explicit handoffs"
   },
   "plugins": [
     {
       "name": "sdlc",
       "source": {
         "source": "local",
-        "path": "./plugins/sdlc"
+        "path": "./.agents"
       },
       "policy": {
         "installation": "AVAILABLE"

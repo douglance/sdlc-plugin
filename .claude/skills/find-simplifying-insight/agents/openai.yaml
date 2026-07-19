@@ -1,0 +1,4 @@
+interface:
+  display_name: "Find Simplifying Insight"
+  short_description: "Test simpler models against the evidence"
+  default_prompt: "Use $find-simplifying-insight to test whether one simpler model can replace these rules and exceptions."

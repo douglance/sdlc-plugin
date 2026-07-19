@@ -1,11 +1,25 @@
 {
   "name": "sdlc",
-  "description": "Skill-centric SDLC. Each software lifecycle phase is a skill that routes to a specialized subagent: feasibility-analysis, requirements-gathering, planning, design, visual-design, implementation, testing, quality, maintenance, deployment, operations, documentation.",
-  "version": "0.3.0",
+  "description": "A linear software delivery lifecycle with explicit phase handoffs, specialized agents, and reusable engineering skills.",
+  "version": "0.5.0",
   "author": { "name": "Doug Lance" },
   "homepage": "https://github.com/douglance/sdlc-plugin",
   "repository": "https://github.com/douglance/sdlc-plugin",
   "license": "MIT",
   "keywords": ["sdlc", "agents", "skills", "workflow"],
-  "skills": "./plugins/sdlc/skills/"
+  "skills": "./.claude/skills/",
+  "agents": [
+    "./.claude/agents/architect.md",
+    "./.claude/agents/engineer.md",
+    "./.claude/agents/graphic-designer.md",
+    "./.claude/agents/maintainer.md",
+    "./.claude/agents/product-owner.md",
+    "./.claude/agents/project-manager.md",
+    "./.claude/agents/quality-engineer.md",
+    "./.claude/agents/release-engineer.md",
+    "./.claude/agents/researcher.md",
+    "./.claude/agents/sre.md",
+    "./.claude/agents/technical-writer.md",
+    "./.claude/agents/tester.md"
+  ]
 }
