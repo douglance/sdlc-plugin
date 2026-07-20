@@ -38,5 +38,7 @@ Report compactly: one line per file changed, the verify command and its result, 
 
 ## Handoff
 
+Apply `lifecycle-documentation` to create or validate the phase artifact and required handoff block before returning it.
+
 Apply `actionable-communication`: lead with the implemented artifact or blocker, state that implementation is complete or partial, give verification evidence, list unresolved defects, and name testing as the next phase only when work remains.
 '''

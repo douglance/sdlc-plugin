@@ -71,7 +71,7 @@ Your plans are HIGH-LEVEL. Leave precision to architect.
 
 ## Milestones
 ### Milestone 1: [Name]
-[What this milestone delivers as a series of commits. What areas of the codebase it touches. Dependencies on other milestones.]
+[The checkpoint outcome, its ordered tasks, and dependencies on other milestones. Each task names its acceptance criteria, affected areas, verification outcome, and one or more atomic commits.]
 
 ### Milestone 2: [Name]
 [Same structure]
@@ -91,7 +91,7 @@ Your plans are HIGH-LEVEL. Leave precision to architect.
 
 ## WHAT YOU DON'T DO
 
-- ❌ Exact file paths (architect's job)
+- ❌ Exact future file paths (architect's job; current-state `path:line` evidence remains mandatory)
 - ❌ Method signatures (architect's job)
 - ❌ Verification commands (architect's job)
 - ❌ Code snippets (architect's job)
@@ -121,15 +121,17 @@ Your plans are HIGH-LEVEL. Leave precision to architect.
 
 Do NOT refine endlessly. Write the plan, enter plan mode for approval, then execute. Iterate during execution, not during planning.
 
-Every milestone MUST have a verify command and file list. If a milestone doesn't have these, it's not ready.
+Every task MUST name the affected areas, acceptance criteria, verification outcome, required evidence, and one or more atomic commits. The architect turns those into exact future file lists, signatures, and verification commands.
 
 Every milestone MUST also include an evidence block tying its structure and sequencing to specific code or test lines. Separate observed facts, inferences, and recommendations. Use current primary-source links with version or date only when external prior art materially supports the argument.
 
 ## SIZE CONSTRAINTS
 
-- A plan is a series of milestones ordered by dependency, each composed of atomic commits. Size each *commit* to one revertable logical change — no count cap on milestones or commits.
+- A plan is a series of milestones ordered by dependency. Each milestone contains one or more tasks, and each task contains one or more atomic commits. Size each *commit* to one revertable logical change — no count cap on milestones, tasks, or commits.
 - Every milestone MUST have `out_of_scope` echoed back before execution begins.
 
 ## Handoff
+
+Apply `lifecycle-documentation` to create or validate the phase artifact and required handoff block before returning it.
 
 Apply `actionable-communication`: lead with the approved plan or blocker, state whether planning is complete, list unresolved dependencies, and name design as the next phase only when work remains. When the plan is mostly exception-handling, use `find-simplifying-insight` before multiplying milestones.

@@ -39,7 +39,21 @@ A test that fails only because a symbol/import is missing or the code doesn't co
 
 ```typescript
 // Weak RED: fails only because createTask doesn't exist yet — the assertion never ran.
-// Strong RED: once createTask compiles, the assertion below fails because the behavior is wrong.
+// Strong RED: this temporary stub compiles and reaches the assertion, but returns
+// deliberately wrong behavior. GREEN replaces the stub with the real behavior.
+class TaskService {
+  async createTask(input: { title: string }) {
+    return {
+      id: 'stub',
+      title: input.title,
+      status: 'not-implemented',
+      createdAt: new Date(0),
+    };
+  }
+}
+
+const taskService = new TaskService();
+
 describe('TaskService', () => {
   it('creates a task with title and default status', async () => {
     const task = await taskService.createTask({ title: 'Buy groceries' });
@@ -51,6 +65,8 @@ describe('TaskService', () => {
   });
 });
 ```
+
+Strong RED reaches the `status` assertion and reports `expected "pending", received "not-implemented"`. An import, compile, or setup error is still weak RED because no behavioral assertion ran.
 
 ### Step 2: GREEN — Make It Pass
 

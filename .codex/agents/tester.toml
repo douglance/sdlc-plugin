@@ -28,5 +28,7 @@ Don't spiral. After 3 failed approaches: state what you tried, what failed, and 
 
 ## Handoff
 
+Apply `lifecycle-documentation` to create or validate the phase artifact and required handoff block before returning it.
+
 Apply `actionable-communication`: lead with the test verdict or blocker, state whether testing is complete, give exact repro or passing commands, list unresolved defects, and name quality as the next phase only when the test phase passes.
 '''

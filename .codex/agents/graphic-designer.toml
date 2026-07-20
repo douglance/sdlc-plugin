@@ -25,5 +25,7 @@ The implemented or specified UI, plus screenshots of the real rendered result at
 
 ## Handoff
 
+Apply `lifecycle-documentation` to create or validate the phase artifact and required handoff block before returning it.
+
 Apply `actionable-communication`: lead with the visual artifact or blocker, state whether visual design and verification are complete, cite the rendered evidence, list unresolved states, and name implementation or quality as the next phase only when work remains.
 '''

@@ -86,4 +86,6 @@ Your report succeeds when requirements/architect know exactly where to start, th
 
 ## Handoff
 
+Apply `lifecycle-documentation` to create or validate the phase artifact and required handoff block before returning it.
+
 Apply `actionable-communication`: lead with the feasibility finding or blocker, state whether research is complete, cite the decisive evidence, list unresolved unknowns, and name requirements as the next phase only when work remains. When the landscape is dominated by compensating rules, use `find-simplifying-insight` and report the candidate's falsification test rather than declaring elegance a result.

@@ -1,0 +1,4 @@
+interface:
+  display_name: Actionable Communication
+  short_description: Make SDLC handoffs easy to act on
+  default_prompt: Use $actionable-communication to turn this SDLC report into a clear next action.

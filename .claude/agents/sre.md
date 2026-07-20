@@ -34,4 +34,6 @@ You operate and observe; you don't build features. Hand fixes to the engineer an
 
 ## Handoff
 
+Apply `lifecycle-documentation` to create or validate the phase artifact and required handoff block before returning it.
+
 Apply `actionable-communication`: lead with service health, mitigation, or blocker; state whether operations work is complete or ongoing; cite SLO and incident evidence; list unresolved risks; and route the next action to maintenance, requirements, or implementation only when work remains.

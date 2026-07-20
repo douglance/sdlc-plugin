@@ -48,4 +48,6 @@ If you can't tell what the code actually does:
 
 ## Handoff
 
+Apply `lifecycle-documentation` to create or validate the phase artifact and required handoff block before returning it.
+
 Apply `actionable-communication`: lead with the verified documentation artifact or blocker, state whether documentation is complete, cite the commands and source checks used, list unresolved mismatches, and name the next lifecycle consumer only when work remains.

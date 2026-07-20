@@ -19,7 +19,7 @@ A linear software-delivery lifecycle with specialized agents, reusable skills, a
 | `documentation` | `technical-writer` | documentation verified against shipped behavior |
 | `maintenance` | `maintainer` | behavior-preserving simplification |
 
-The package contains 12 agents and 29 skills. `actionable-communication` makes phase reports and handoffs immediately actionable. `find-simplifying-insight` searches for a falsifiable simpler model when a system has accumulated compensating rules and exceptions.
+The package contains 12 agents and 30 skills. `actionable-communication` makes phase reports and handoffs immediately actionable. `find-simplifying-insight` searches for a falsifiable simpler model when a system has accumulated compensating rules and exceptions.
 
 Requirements, specifications, and plans must ground material arguments in concrete prior art: exact `path:line` repository citations, recorded searches when no analogue exists, and current primary sources for relevant external claims.
 
@@ -64,7 +64,7 @@ codex plugin marketplace add douglance/sdlc-plugin
 codex plugin add sdlc@sdlc-marketplace
 ```
 
-Codex plugins install the 29 skills. Codex also supports first-class custom agents, but they are a separate user configuration surface; install the generated 12 agent TOMLs with:
+Codex plugins install the 30 skills. Installed Codex skills are explicitly invocable with `$` or `/skills`; Claude's `user-invocable` metadata is not part of the Codex skill format. Codex also supports first-class custom agents, but they are a separate user configuration surface; install the generated 12 agent TOMLs with:
 
 ```bash
 cd ~/.agents/source

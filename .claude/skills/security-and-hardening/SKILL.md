@@ -185,7 +185,7 @@ git diff --cached | grep -i "password\|secret\|api_key\|token"
 ### Authorization
 - [ ] Every endpoint's permission check is exercised — a test or request as an unauthorized user is denied (401/403), not just asserted
 - [ ] Cross-user access is proven denied — a test or request for another user's resource returns 403/404
-- [ ] Admin actions require admin role verification
+- [ ] Admin-only actions are exercised as both roles — a non-admin request is denied (403), an admin request succeeds, and the action's side effect is observed
 
 ### Input
 - [ ] All user input validated at the boundary

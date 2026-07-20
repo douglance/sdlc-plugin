@@ -33,5 +33,7 @@ Don't debug in production. If the smoke check fails:
 
 ## Handoff
 
+Apply `lifecycle-documentation` to create or validate the phase artifact and required handoff block before returning it.
+
 Apply `actionable-communication`: lead with the deployed version, rollback, or blocker; state whether deployment is complete; cite live smoke evidence; list unresolved release risks; and name operations as the next phase only after the target is healthy.
 '''

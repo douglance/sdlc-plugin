@@ -1,10 +1,9 @@
 ---
 name: planning-and-task-breakdown
 description: >-
-  Breaks work into ordered tasks. Use when you have a spec or clear requirements
-  and need to break work into implementable tasks. Use when a task feels too
-  large to start, when you need to estimate scope, or when parallel work is
-  possible.
+  Breaks work into milestones containing ordered tasks and atomic commits. Use
+  when you have a spec or clear requirements and need implementable vertical
+  slices, scope estimates, dependency order, or parallel work boundaries.
 ---
 # Planning and Task Breakdown
 
@@ -19,6 +18,17 @@ Write the plan and its handoff with `lifecycle-documentation`.
 - The implementation order isn't obvious
 
 **When NOT to use:** Single-file changes with obvious scope, or when the spec already contains well-defined tasks.
+
+## Planning hierarchy
+
+```text
+Plan
+└── Milestone: a checkpoint outcome
+    └── Task: an implementable vertical slice with acceptance criteria
+        └── Commit: an atomic, revertable logical change
+```
+
+A milestone contains one or more ordered tasks. A task contains one or more ordered commits. Planning names affected areas and required verification outcomes; design adds exact future file paths, signatures, and commands.
 
 ## The Planning Process
 
@@ -70,7 +80,7 @@ Task 3: User can create a task (task schema + API + UI for creation)
 Task 4: User can view task list (query + API + UI for list view)
 ```
 
-Each slice delivers working, testable functionality and becomes one or more tasks below.
+Each slice delivers working, testable functionality and becomes a task below. A task may require more than one atomic commit to reach its acceptance criteria.
 
 ### Step 4: Write Tasks
 
@@ -86,21 +96,23 @@ Each task follows this structure:
 - [ ] [Specific, testable condition]
 
 **Verification:**
-- [ ] Tests pass: `npm test -- --grep "feature-name"`
-- [ ] Build succeeds: `npm run build`
-- [ ] Observe: [drive the flow / screenshot the rendered result / the specific output to eyeball]
+- [ ] Required outcome: [behavior, quality gate, or observation that proves the task]
+- [ ] Evidence needed: [test result / type or build result / rendered or runtime observation]
 
 **Dependencies:** [Task numbers this depends on, or "None"]
 
-**Files likely touched:**
-- `src/path/to/file.ts`
-- `tests/path/to/test.ts`
+**Affected areas:**
+- [Subsystem, boundary, or component; design supplies exact future files]
 
 **Evidence and prior art:**
 - `src/existing-flow.ts:24-61` — analogous control flow; reuse its boundary, not its persistence model
 - Search with no result: `rg "alternate-flow" src tests`
 
 **Estimated scope:** [Small: 1-2 files | Medium: 3-5 files | Large: 5+ files]
+
+**Commits:**
+1. `[atomic logical change]`
+2. `[next atomic logical change, when needed]`
 ```
 
 ### Step 5: Order and Checkpoint
@@ -109,13 +121,13 @@ Arrange tasks so that:
 
 1. Dependencies are satisfied (build foundation first)
 2. Each task leaves the system in a working state
-3. Verification checkpoints occur after every 2-3 tasks
+3. A verification checkpoint closes every milestone
 4. High-risk tasks are early (fail fast)
 
 Add explicit checkpoints:
 
 ```markdown
-## Checkpoint: After Tasks 1-3
+## Checkpoint: [Milestone outcome]
 - [ ] All tests pass
 - [ ] Application builds without errors
 - [ ] Core user flow exercised end-to-end — the command that drives it passes, or drive it manually and screenshot the result
@@ -131,7 +143,7 @@ Add explicit checkpoints:
 | **M** | 3-5 | One feature slice | User registration flow |
 | **L** | 5-8 | Multi-component feature | Search with filtering and pagination |
 
-One commit = one logical change (~100 lines — see `git-workflow-and-versioning`); a milestone = the commits that reach one checkpoint. An agent performs best when each commit stays XS–M; if a task grows past that, split it into more commits.
+The table sizes tasks. One commit is one revertable logical change (~100 lines — see `git-workflow-and-versioning`). A task contains however many atomic commits it needs to satisfy its acceptance criteria; if one commit grows too broad, split it without inventing another task unless the acceptance boundary also changes.
 
 **When to break a task down further:**
 - It would take more than one focused session (roughly 2+ hours of agent work)
@@ -159,22 +171,26 @@ One commit = one logical change (~100 lines — see `git-workflow-and-versioning
 ## Task List
 
 ### Milestone 1: Foundation
-- [ ] Commit 1: ...
-- [ ] Commit 2: ...
+- [ ] Task 1: ...
+  - Commit 1: ...
+  - Commit 2: ...
 
 ### Checkpoint: Foundation
 - [ ] Tests pass, builds clean
 
 ### Milestone 2: Core Features
-- [ ] Commit 3: ...
-- [ ] Commit 4: ...
+- [ ] Task 2: ...
+  - Commit 3: ...
+- [ ] Task 3: ...
+  - Commit 4: ...
 
 ### Checkpoint: Core Features
 - [ ] End-to-end flow exercised — the command that drives it passes (or drive it and screenshot)
 
 ### Milestone 3: Polish
-- [ ] Commit 5: ...
-- [ ] Commit 6: ...
+- [ ] Task 4: ...
+  - Commit 5: ...
+  - Commit 6: ...
 
 ### Checkpoint: Complete
 - [ ] Each acceptance criterion checked against its verification command or observation
@@ -202,7 +218,8 @@ When multiple agents or sessions are available:
 Before starting implementation, confirm:
 
 - [ ] Every task has acceptance criteria
-- [ ] Every task has a verification step
+- [ ] Every task names its verification outcome and required evidence
+- [ ] Every task contains one or more ordered atomic commits
 - [ ] Every material claim about the repository cites exact lines of code or tests
 - [ ] Each major decision names concrete prior art or records the search that found none
 - [ ] Observations, inferences, and recommendations are distinguishable
