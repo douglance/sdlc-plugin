@@ -10,6 +10,7 @@ skills:
   - security-and-hardening
   - performance-optimization
   - actionable-communication
+  - lifecycle-documentation
 color: magenta
 context: fork
 ---

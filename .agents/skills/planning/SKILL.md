@@ -8,6 +8,8 @@ description: >-
 This phase is owned by `project-manager`. When the host exposes named agents and you are the parent/orchestrator, delegate this phase to `project-manager` and pass the prior artifact. If you are already that agent or delegation is unavailable, execute locally; never recursively delegate the same phase. Consume the validated specification, produce milestones with dependencies, risks, and out-of-scope boundaries, return unresolved dependencies, and hand off to `design` only when work remains. Format the result with `actionable-communication`.
 </execution-contract>
 
+Write and gate the phase artifact with `lifecycle-documentation`.
+
 <what-to-do>
 
 Turn the goal into structure. Gather enough codebase context to understand the terrain, then break the work into a series of high-level milestones, each composed of commits. Ground the structure in cited prior art rather than generic architectural preference.

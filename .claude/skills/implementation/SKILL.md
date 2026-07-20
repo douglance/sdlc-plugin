@@ -10,6 +10,8 @@ agent: engineer
 This phase is owned by `engineer`. When the host exposes named agents and you are the parent/orchestrator, delegate this phase to `engineer` and pass the prior artifact. If you are already that agent or delegation is unavailable, execute locally; never recursively delegate the same phase. Consume the design and plan, produce tested implementation in bounded slices, return unresolved defects or deviations, and hand off to `testing` only when work remains. Format the result with `actionable-communication`.
 </execution-contract>
 
+Write and gate the phase artifact with `lifecycle-documentation`.
+
 <what-to-do>
 
 Build it, test-first. Write the failing test that defines the behavior, then write the code that makes it pass. Deliver one step at a time, keeping the tree green at every step.

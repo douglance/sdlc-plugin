@@ -10,6 +10,7 @@ skills:
   - debugging-and-error-recovery
   - performance-optimization
   - actionable-communication
+  - lifecycle-documentation
 color: orange
 context: fork
 ---

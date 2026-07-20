@@ -11,6 +11,8 @@ agent: graphic-designer
 This phase is owned by `graphic-designer`. When the host exposes named agents and you are the parent/orchestrator, delegate this phase to `graphic-designer` and pass the prior artifact. If you are already that agent or delegation is unavailable, execute locally; never recursively delegate the same phase. Consume the product requirements and current surface, produce the visual design plus rendered evidence, return unresolved states or accessibility issues, and hand off to `implementation` or `quality` only when work remains. Format the result with `actionable-communication`.
 </execution-contract>
 
+Write and gate the phase artifact with `lifecycle-documentation`.
+
 <what-to-do>
 
 Design and verify the user-facing surface. Work from the user's task, design the whole composition and every state, meet accessibility, then LOOK — render it, screenshot it, and judge the real result.

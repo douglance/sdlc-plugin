@@ -12,6 +12,8 @@ agent: sre
 This phase is owned by `sre`. When the host exposes named agents and you are the parent/orchestrator, delegate this phase to `sre` and pass the prior artifact. If you are already that agent or delegation is unavailable, execute locally; never recursively delegate the same phase. Consume the deployed service and operating targets, produce SLOs, runbooks, incident evidence, and feedback items, then route remaining work to `maintenance`, `requirements-gathering`, or `implementation` by its nature. Format the result with `actionable-communication`.
 </execution-contract>
 
+Write and gate the phase artifact with `lifecycle-documentation`.
+
 <what-to-do>
 
 Keep the shipped software healthy in the real world. Stand up observability, respond to incidents, and feed what production teaches you back to maintenance and requirements.

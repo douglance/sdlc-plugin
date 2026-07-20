@@ -8,6 +8,7 @@ model: claude-sonnet-5
 skills:
   - frontend-design
   - actionable-communication
+  - lifecycle-documentation
 color: purple
 context: fork
 ---

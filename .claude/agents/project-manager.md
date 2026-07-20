@@ -8,6 +8,7 @@ model: claude-sonnet-5
 skills:
   - planning-and-task-breakdown
   - actionable-communication
+  - lifecycle-documentation
   - find-simplifying-insight
 color: blue
 context: fork

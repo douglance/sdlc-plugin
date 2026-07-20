@@ -9,6 +9,7 @@ skills:
   - api-and-interface-design
   - performance-optimization
   - actionable-communication
+  - lifecycle-documentation
   - find-simplifying-insight
 color: green
 context: fork

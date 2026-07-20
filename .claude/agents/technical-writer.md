@@ -15,6 +15,7 @@ tools:
 skills:
   - documentation-and-adrs
   - actionable-communication
+  - lifecycle-documentation
 color: cyan
 context: fork
 ---

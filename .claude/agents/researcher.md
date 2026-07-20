@@ -7,6 +7,7 @@ description: >-
 model: claude-sonnet-5
 skills:
   - actionable-communication
+  - lifecycle-documentation
   - find-simplifying-insight
 color: green
 context: fork

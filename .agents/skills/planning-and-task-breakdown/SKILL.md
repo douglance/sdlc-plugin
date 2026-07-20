@@ -8,6 +8,8 @@ description: >-
 ---
 # Planning and Task Breakdown
 
+Write the plan and its handoff with `lifecycle-documentation`.
+
 ## When to Use
 
 - You have a spec and need to break it into implementable units

@@ -8,6 +8,8 @@ description: >-
 This phase is owned by `technical-writer`. When the host exposes named agents and you are the parent/orchestrator, delegate this phase to `technical-writer` and pass the prior artifact. If you are already that agent or delegation is unavailable, execute locally; never recursively delegate the same phase. Consume shipped behavior and verified interfaces, produce documentation checked against the source and working commands, return unresolved mismatches, and identify the next lifecycle consumer only when work remains. Format the result with `actionable-communication`.
 </execution-contract>
 
+Write and gate the phase artifact with `lifecycle-documentation`.
+
 <what-to-do>
 
 Document what actually shipped, not what was planned. Read the change, then write the docs a future engineer or agent needs: how to use it, how the interface behaves, and why the key decisions were made.

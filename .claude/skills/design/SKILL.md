@@ -10,6 +10,8 @@ agent: architect
 This phase is owned by `architect`. When the host exposes named agents and you are the parent/orchestrator, delegate this phase to `architect` and pass the prior artifact. If you are already that agent or delegation is unavailable, execute locally; never recursively delegate the same phase. Consume the specification and plan, produce interfaces, exact files, trade-offs, and verification contracts, return unresolved design decisions, and hand off to `implementation` only when work remains. Pair with `visual-design` for user-facing work. Format the result with `actionable-communication`.
 </execution-contract>
 
+Write and gate the phase artifact with `lifecycle-documentation`.
+
 <what-to-do>
 
 Make the work precise. Design the interfaces and contracts, name the exact files and signatures, and define the architecture and its trade-offs. Specify how each unit of work will be verified.

@@ -10,6 +10,8 @@ agent: maintainer
 This phase is owned by `maintainer`. When the host exposes named agents and you are the parent/orchestrator, delegate this phase to `maintainer` and pass the prior artifact. If you are already that agent or delegation is unavailable, execute locally; never recursively delegate the same phase. Consume the working system and a bounded debt target, produce behavior-preserving simplification with before-and-after proof, return unsafe cuts, and hand off to `testing` or `quality` only when work remains. Format the result with `actionable-communication`.
 </execution-contract>
 
+Write and gate the phase artifact with `lifecycle-documentation`.
+
 <what-to-do>
 
 Make the code smaller. Remove dead code, cut duplication and needless indirection, and simplify — without changing behavior.

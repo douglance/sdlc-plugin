@@ -15,6 +15,7 @@ skills:
   - git-workflow-and-versioning
   - security-and-hardening
   - actionable-communication
+  - lifecycle-documentation
 color: orange
 context: fork
 ---

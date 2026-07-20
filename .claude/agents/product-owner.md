@@ -10,6 +10,7 @@ skills:
   - interrogate
   - interrogate-with-docs
   - actionable-communication
+  - lifecycle-documentation
   - find-simplifying-insight
 color: yellow
 context: fork

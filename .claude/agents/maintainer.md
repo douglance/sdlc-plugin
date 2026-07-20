@@ -14,6 +14,7 @@ tools:
 skills:
   - deslop
   - actionable-communication
+  - lifecycle-documentation
   - find-simplifying-insight
 color: cyan
 ---

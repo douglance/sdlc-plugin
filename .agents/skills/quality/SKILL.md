@@ -9,6 +9,8 @@ description: >-
 This phase is owned by `quality-engineer`. When the host exposes named agents and you are the parent/orchestrator, delegate this phase to `quality-engineer` and pass the prior artifact. If you are already that agent or delegation is unavailable, execute locally; never recursively delegate the same phase. Consume the change, specification, and test evidence, produce a verification-and-validation gate verdict, return release-blocking findings, and hand off to `deployment` only after the gate passes. Format the result with `actionable-communication`.
 </execution-contract>
 
+Write and gate the phase artifact with `lifecycle-documentation`.
+
 <what-to-do>
 
 Judge whether the change is *right*, not just whether it runs. Do verification (built right) and validation (right thing built), review the change against a checklist, and check the quality attributes that matter.

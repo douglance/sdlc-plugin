@@ -9,6 +9,7 @@ skills:
   - test-driven-development
   - git-workflow-and-versioning
   - actionable-communication
+  - lifecycle-documentation
 color: blue
 context: fork
 ---

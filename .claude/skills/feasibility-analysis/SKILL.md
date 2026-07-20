@@ -11,6 +11,8 @@ agent: researcher
 This phase is owned by `researcher`. When the host exposes named agents and you are the parent/orchestrator, delegate this phase to `researcher` and pass the prior artifact. If you are already that agent or delegation is unavailable, execute locally; never recursively delegate the same phase. Consume the idea or problem statement, produce a sourced landscape of options and constraints, return unresolved unknowns, and hand off to `requirements-gathering` only when work remains. Format the result with `actionable-communication`.
 </execution-contract>
 
+Write and gate the phase artifact with `lifecycle-documentation`.
+
 <what-to-do>
 
 Scout the problem space and map the landscape. Find what already exists, how others solve this, and what could make it hard or impossible. Explore wide before going deep — survey many options, don't tunnel on the first.

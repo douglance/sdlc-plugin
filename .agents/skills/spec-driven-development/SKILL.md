@@ -7,6 +7,8 @@ description: >-
 ---
 # Spec-Driven Development
 
+Write the specification and its handoff with `lifecycle-documentation`.
+
 ## When to Use
 
 - Starting a new project or feature

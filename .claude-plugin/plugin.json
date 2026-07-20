@@ -1,7 +1,7 @@
 {
   "name": "sdlc",
   "description": "A linear software delivery lifecycle with explicit phase handoffs, specialized agents, and reusable engineering skills.",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "author": { "name": "Doug Lance" },
   "homepage": "https://github.com/douglance/sdlc-plugin",
   "repository": "https://github.com/douglance/sdlc-plugin",

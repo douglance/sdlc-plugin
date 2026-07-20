@@ -9,6 +9,7 @@ skills:
   - test-driven-development
   - debugging-and-error-recovery
   - actionable-communication
+  - lifecycle-documentation
 color: red
 context: fork
 ---

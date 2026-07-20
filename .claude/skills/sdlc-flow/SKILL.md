@@ -19,6 +19,13 @@ that owner, or when named-agent delegation is unavailable, run the phase locally
 the same phase recursively. The artifact contract is portable; automatic delegation is a host
 capability, not something Rulesync can synthesize.
 
+## Lifecycle artifact contract
+
+Use `lifecycle-documentation` for every phase output and input gate. Select the smallest applicable
+IEEE/ISO information item, write it in STE-derived controlled English, preserve stable IDs, and end
+with the required handoff block. A receiving phase must reject an incomplete artifact instead of
+guessing what the producing phase meant.
+
 ## The main flow: idea → shipped
 
 Run these in order; each one's output is the next one's input. Skip any phase the work doesn't need.
@@ -65,6 +72,9 @@ at the end:
   the screenshot is the test.
 - **Actionable handoffs** — use `actionable-communication` so every phase leads with its artifact or
   blocker, gives compact evidence, and names the next phase only when work remains.
+- **Lifecycle documents** — use `lifecycle-documentation` to select the correct SRS, plan, design,
+  configuration, test, quality, V&V, user, review, audit, release, or operations artifact and apply
+  the same controlled-English and traceability rules at every phase boundary.
 - **Simplifying insight** — use `find-simplifying-insight` when rules and exceptions proliferate and
   the underlying model may be wrong. Require a novel prediction and falsification test; do not force
   a paradigm shift when the current model survives.

@@ -10,6 +10,8 @@ agent: product-owner
 This phase is owned by `product-owner`. When the host exposes named agents and you are the parent/orchestrator, delegate this phase to `product-owner` and pass the prior artifact. If you are already that agent or delegation is unavailable, execute locally; never recursively delegate the same phase. Consume the request and any feasibility evidence, produce a falsified scoped specification, return unresolved decisions, and hand off to `planning` only when work remains. Format the result with `actionable-communication`.
 </execution-contract>
 
+Write and gate the phase artifact with `lifecycle-documentation`.
+
 <what-to-do>
 
 Run the relentless interrogation from the `interrogate` skill against the requirements until the work is unambiguous — one question at a time, a recommended answer for each, exploring the codebase instead of asking when you can.

@@ -10,6 +10,8 @@ agent: release-engineer
 This phase is owned by `release-engineer`. When the host exposes named agents and you are the parent/orchestrator, delegate this phase to `release-engineer` and pass the prior artifact. If you are already that agent or delegation is unavailable, execute locally; never recursively delegate the same phase. Consume a green exact commit and release criteria, produce the deployed version, smoke evidence, and rollback path, return unresolved release risks, and hand off to `operations` only after the target is healthy. Format the result with `actionable-communication`.
 </execution-contract>
 
+Write and gate the phase artifact with `lifecycle-documentation`.
+
 <what-to-do>
 
 Ship it safely. Take built-and-tested code to its target environment with a path forward and a path back. Decide the version, run the release, confirm it works in place, and be ready to roll back the instant it doesn't.
