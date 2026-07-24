@@ -1,15 +1,16 @@
 ---
 name: sdlc-flow
 description: >-
-  The map of the SDLC lifecycle — which phase skill to reach for and what comes
-  next. Use when starting work and unsure where to begin, going from an idea to
-  shipped code, or deciding which phase fits the situation.
+  Use when a request spans multiple lifecycle phases or the correct next phase
+  is unclear.
 ---
 # SDLC Flow
 
-The plugin is a pipeline of **phases**, each a skill that routes to one agent and emits an
-**artifact** the next phase consumes. This skill is the map: where to start, what follows, and how
-the pieces connect.
+The plugin is an optional graph of **phases**. Each phase is a skill that routes to one agent role
+and emits an **artifact** for its immediate receiver. This skill explains where to start, which
+dependencies apply, and how the phases connect.
+
+Read [references/core-ontology.md](references/core-ontology.md) when reasoning about system entities, relationships, cardinalities, lifecycle edges, authority, traceability, evidence, or provider projections. The ontology controls relationships; project glossaries control term definitions.
 
 ## Host routing contract
 
@@ -26,21 +27,22 @@ IEEE/ISO information item, write it in STE-derived controlled English, preserve 
 with the required handoff block. A receiving phase must reject an incomplete artifact instead of
 guessing what the producing phase meant.
 
-## The main flow: idea → shipped
+## The default path: idea → shipped
 
-Run these in order; each one's output is the next one's input. Skip any phase the work doesn't need.
+Select only the phases the work needs. Run selected phases in dependency order; each handoff passes
+one accepted artifact to one immediate receiver.
 
 1. **`feasibility-analysis`** (→ researcher) — scout an unfamiliar problem space. Start here when
    the approach is unknown. Produces options, constraints, and trade-offs.
 2. **`requirements-gathering`** (→ product-owner) — turn a vague or high-blast-radius request into
-   a falsified spec. Start here when *what* to build is unclear. Produces a scoped spec.
+   a stress-tested specification. Start here when *what* to build is unclear.
 3. **`planning`** (→ project-manager) — break the spec into a plan of milestones with dependencies, risks,
    and an explicit out-of-scope set. Produces a plan.
 4. **`design`** (→ architect) — settle interfaces, contracts, exact files, and trade-offs.
    Produces a technical design. For user-facing work, pair with **`visual-design`** (→ graphic-designer)
    for layout, composition, states, and accessibility.
 5. **`implementation`** (→ engineer) — build it test-first in vertical slices. Produces tested,
-   committed code.
+   bounded changes. Commit those changes when the task includes commit authority.
 6. **`testing`** (→ tester) — adversarially falsify the change by executing it across edge cases,
    scale, and security. Produces a verdict with reproducible failing cases.
 7. **`quality`** (→ quality-engineer) — assure the change beyond execution: verification & validation,
@@ -68,8 +70,8 @@ at the end:
   construction, attacked in testing. Not a final checklist.
 - **Traceability** — give each requirement a stable ID and carry it into design, tasks, and tests
   so the link stays greppable.
-- **Visual verification** — for any UI change, the `graphic-designer` LOOKs at the rendered result;
-  the screenshot is the test.
+- **Visual verification** — for any UI change, the `graphic-designer` inspects the rendered result.
+  Screenshots provide evidence for visual claims; executable tests provide evidence for behavior.
 - **Actionable handoffs** — use `actionable-communication` so every phase leads with its artifact or
   blocker, gives compact evidence, and names the next phase only when work remains.
 - **Lifecycle documents** — use `lifecycle-documentation` to select the correct SRS, plan, design,
@@ -81,7 +83,7 @@ at the end:
 
 ## On-ramps
 
-Situations that start mid-pipeline rather than at the top:
+Situations that enter the lifecycle at the smallest applicable phase:
 
 - **A bug or unexpected behavior** → `debugging-and-error-recovery` (root-cause it), then
   `implementation` to fix it test-first (write a regression test first).
@@ -93,7 +95,7 @@ Situations that start mid-pipeline rather than at the top:
 
 ## Standalone / user-invoked
 
-Reach for these directly, off the pipeline:
+Reach for these methods directly, outside the phase graph:
 
 - **`interrogate`** — relentless interrogation to stress-test any plan, design, spec, or approach (the base
   interrogation the requirements phase builds on).

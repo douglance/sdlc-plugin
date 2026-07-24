@@ -1,6 +1,8 @@
 ---
 name: deslop
-description: Remove AI-generated code slop and clean up code style
+description: >-
+  Use to remove unnecessary generated patterns from the current diff without
+  changing behavior.
 ---
 # Remove AI code slop
 

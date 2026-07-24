@@ -58,13 +58,13 @@ describe output as `STE-derived controlled English`, not `ASD-STE100 compliant`.
 Use this pattern for a binding requirement:
 
 ```text
-<Condition>, the <actor> shall <action> <object> within <measurable limit>.
+<Requirement ID> <Condition>, the <actor> MUST <action> <object> within <measurable limit>.
 ```
 
 Example:
 
 ```text
-When authentication succeeds, the service shall create the session within 500 milliseconds.
+AUTH-001 When authentication succeeds, the service MUST create the session within 500 milliseconds.
 ```
 
 Give each requirement one stable ID. Keep rationale, source, priority, and verification method in

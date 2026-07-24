@@ -9,8 +9,6 @@ model: claude-sonnet-5
 skills:
   - security-and-hardening
   - performance-optimization
-  - actionable-communication
-  - lifecycle-documentation
 color: magenta
 context: fork
 ---
@@ -35,6 +33,6 @@ You do not write production code — you assure it. You reference `security-and-
 
 ## Handoff
 
-Apply `lifecycle-documentation` to create or validate the phase artifact and required handoff block before returning it.
+Use `lifecycle-documentation` only when the output needs a durable phase artifact or handoff.
 
 Apply `actionable-communication`: lead with the quality-gate verdict, state whether quality is complete or blocked, cite verification and validation evidence, list findings that prevent release, and name deployment as the next phase only after the gate passes.

@@ -1,16 +1,16 @@
 ---
 name: design
 description: >-
-  Start here to settle how a non-trivial change will be built — interfaces,
-  contracts, file-level structure, and trade-offs.
+  Use when a nontrivial change has unsettled interfaces, contracts, file
+  structure, trade-offs, or verification boundaries.
 context: fork
 agent: architect
 ---
 <execution-contract>
-This phase is owned by `architect`. When the host exposes named agents and you are the parent/orchestrator, delegate this phase to `architect` and pass the prior artifact. If you are already that agent or delegation is unavailable, execute locally; never recursively delegate the same phase. Consume the specification and plan, produce interfaces, exact files, trade-offs, and verification contracts, return unresolved design decisions, and hand off to `implementation` only when work remains. Pair with `visual-design` for user-facing work. Format the result with `actionable-communication`.
+This skill defines the design phase. Use the `architect` agent when a bounded design task can proceed independently; otherwise work locally. Produce precise interfaces, files, trade-offs, and verification contracts.
 </execution-contract>
 
-Write and gate the phase artifact with `lifecycle-documentation`.
+Use `lifecycle-documentation` only when the result needs a durable artifact or handoff.
 
 <what-to-do>
 
@@ -18,7 +18,7 @@ Make the work precise. Design the interfaces and contracts, name the exact files
 
 Favor stable interfaces and the simplest design that meets the requirements. Don't over-build — every element of the design must trace to a requirement.
 
-Ground every claim about the current architecture in exact `path:line` evidence and identify the closest existing implementation for each substantial boundary. When the design mainly preserves accumulated exceptions, run `find-simplifying-insight` and require a falsification test before replacing the current model.
+Ground every claim about the current architecture in exact `path:line` evidence and identify the closest existing implementation as prior art for each substantial boundary. When the design mainly preserves accumulated exceptions, run `find-simplifying-insight` and require a falsification test before replacing the current model.
 
 </what-to-do>
 

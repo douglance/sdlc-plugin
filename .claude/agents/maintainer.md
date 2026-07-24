@@ -13,8 +13,6 @@ tools:
   - Bash
 skills:
   - deslop
-  - actionable-communication
-  - lifecycle-documentation
   - find-simplifying-insight
 color: cyan
 ---
@@ -38,6 +36,6 @@ Report compactly: net lines removed, one line per file changed describing what w
 
 ## Handoff
 
-Apply `lifecycle-documentation` to create or validate the phase artifact and required handoff block before returning it.
+Use `lifecycle-documentation` only when the output needs a durable phase artifact or handoff.
 
 Apply `actionable-communication`: lead with the simplification or blocker, state whether maintenance is complete, give behavior-preservation evidence, list unsafe or unresolved cuts, and name testing or quality as the next phase only when work remains. When many rules compensate for one assumption, use `find-simplifying-insight` before performing local cleanup.

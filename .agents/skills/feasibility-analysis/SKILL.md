@@ -1,15 +1,14 @@
 ---
 name: feasibility-analysis
 description: >-
-  Start here to scout an unfamiliar problem space — research existing solutions,
-  patterns, anti-patterns, constraints, and technical feasibility before
-  committing to an approach.
+  Use when unfamiliar technology or constraints require sourced options and
+  feasibility evidence before choosing an approach.
 ---
 <execution-contract>
-This phase is owned by `researcher`. When the host exposes named agents and you are the parent/orchestrator, delegate this phase to `researcher` and pass the prior artifact. If you are already that agent or delegation is unavailable, execute locally; never recursively delegate the same phase. Consume the idea or problem statement, produce a sourced landscape of options and constraints, return unresolved unknowns, and hand off to `requirements-gathering` only when work remains. Format the result with `actionable-communication`.
+This skill defines the feasibility phase. Use the `researcher` agent when a bounded investigation can proceed independently; otherwise work locally. Produce sourced options, constraints, and unresolved unknowns.
 </execution-contract>
 
-Write and gate the phase artifact with `lifecycle-documentation`.
+Use `lifecycle-documentation` only when the result needs a durable artifact or handoff.
 
 <what-to-do>
 

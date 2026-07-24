@@ -1,7 +1,7 @@
 {
   "name": "sdlc",
   "version": "0.5.1",
-  "description": "A linear software delivery lifecycle with explicit phase handoffs, specialized agents, and reusable engineering skills.",
+  "description": "An adaptable software-delivery lifecycle with explicit handoffs, specialist agent roles, and reusable engineering skills.",
   "author": { "name": "Doug Lance" },
   "homepage": "https://github.com/douglance/sdlc-plugin",
   "repository": "https://github.com/douglance/sdlc-plugin",
@@ -10,8 +10,8 @@
   "skills": "skills",
   "interface": {
     "displayName": "SDLC",
-    "shortDescription": "Linear delivery phases with explicit handoffs",
-    "longDescription": "A skill-centric software delivery lifecycle with specialized phase agents, verified handoffs, and reusable engineering disciplines.",
+    "shortDescription": "Adaptable delivery phases with explicit handoffs",
+    "longDescription": "A skill-centric software-delivery lifecycle with specialist agent roles, verified handoffs, and reusable engineering disciplines.",
     "developerName": "Doug Lance",
     "category": "Productivity",
     "capabilities": ["Interactive", "Write"],

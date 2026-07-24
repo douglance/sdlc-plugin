@@ -1,16 +1,14 @@
 ---
 name: operations
 description: >-
-  Start here to run software in production after it ships — observability,
-  incident response, and operational continuity. Use to monitor a live service,
-  handle an incident, write a runbook, or close the loop from production back to
-  the backlog.
+  Use when a live service needs observability, incident response, SLOs,
+  runbooks, or continuity work.
 ---
 <execution-contract>
-This phase is owned by `sre`. When the host exposes named agents and you are the parent/orchestrator, delegate this phase to `sre` and pass the prior artifact. If you are already that agent or delegation is unavailable, execute locally; never recursively delegate the same phase. Consume the deployed service and operating targets, produce SLOs, runbooks, incident evidence, and feedback items, then route remaining work to `maintenance`, `requirements-gathering`, or `implementation` by its nature. Format the result with `actionable-communication`.
+This skill defines the operations phase. Use the `sre` agent when bounded production work can proceed independently; otherwise work locally. Produce operational evidence, recovery guidance, and only material follow-up work.
 </execution-contract>
 
-Write and gate the phase artifact with `lifecycle-documentation`.
+Use `lifecycle-documentation` only when the result needs a durable artifact or handoff.
 
 <what-to-do>
 

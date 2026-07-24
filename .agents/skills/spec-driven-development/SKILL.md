@@ -1,9 +1,8 @@
 ---
 name: spec-driven-development
 description: >-
-  Creates specs before coding. Use when starting a new project, feature, or
-  significant change and no specification exists yet. Use when requirements are
-  unclear, ambiguous, or only exist as a vague idea.
+  Use when a significant change needs a durable specification before
+  implementation can begin safely.
 ---
 # Spec-Driven Development
 

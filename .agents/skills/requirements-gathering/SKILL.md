@@ -1,14 +1,14 @@
 ---
 name: requirements-gathering
 description: >-
-  Start here to turn a vague, ambiguous, or high-blast-radius request into a
-  clear, falsified spec through relentless questioning.
+  Use when a request is ambiguous, high-blast-radius, difficult to reverse, or
+  missing a material product decision.
 ---
 <execution-contract>
-This phase is owned by `product-owner`. When the host exposes named agents and you are the parent/orchestrator, delegate this phase to `product-owner` and pass the prior artifact. If you are already that agent or delegation is unavailable, execute locally; never recursively delegate the same phase. Consume the request and any feasibility evidence, produce a falsified scoped specification, return unresolved decisions, and hand off to `planning` only when work remains. Format the result with `actionable-communication`.
+This skill defines the requirements phase. Use the `product-owner` agent when a bounded requirements inquiry can proceed independently; otherwise work locally. Produce a scoped specification and surface only material unresolved decisions.
 </execution-contract>
 
-Write and gate the phase artifact with `lifecycle-documentation`.
+Use `lifecycle-documentation` only when the result needs a durable artifact or handoff.
 
 <what-to-do>
 

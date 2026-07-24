@@ -1,14 +1,21 @@
 ---
 name: actionable-communication
 description: >-
-  Makes SDLC phase reports, handoffs, blockers, and completion summaries easy to
-  act on. Use when work must pass between lifecycle roles or when a technical
-  update needs one clear outcome, bounded next steps, and evidence without
-  tangents.
+  Use for consequential handoffs, blockers, completion reports, requirements,
+  procedures, interface content, or formal documentation that must be easy to
+  act on.
 ---
 # Actionable Communication
 
-Turn lifecycle output into a compact control surface for the next person. Preserve technical truth; change only how it is prioritized and handed off.
+Turn consequential communication into a compact control surface for its reader. Preserve technical truth; change only how it is prioritized and handed off. Routine conversation follows the host's lightweight communication rules without loading this skill.
+
+## Messaging standards
+
+Load the UWDS reference when producing or reviewing formal documentation, requirements, procedures, interface content, safety or accessibility content, or when a scoped standards question arises. For a simple status, blocker, or handoff, use the compact rules below without loading the reference.
+
+The reference is [references/unified-writing-documentation-standard.md](references/unified-writing-documentation-standard.md). Treat it as the canonical Markdown communication baseline without claiming blanket conformance to an external standard.
+
+Resolve conflicts in UWDS precedence order: binding authority; safety or domain standard; project terminology and product specification; audience and platform conventions; UWDS; then general house style. Use AP style only for news, press releases, and public announcements; do not use it as the default for engineering artifacts or technical procedures.
 
 ## Write in decision order
 
@@ -28,7 +35,7 @@ Report an error as:
 - **Evidence:** the observation, command, or artifact that supports it.
 - **Remedy:** the smallest next test or change likely to unblock progress.
 
-Separate a known cause from a hypothesis. Never manufacture certainty, progress, dates, or time estimates.
+Separate a known cause from a hypothesis. Never manufacture certainty, progress, dates, or time estimates. Do not invent observations to complete a template. Mark missing evidence as unknown and name the smallest check that can establish it.
 
 ## Handoff contract
 

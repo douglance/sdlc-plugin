@@ -1,16 +1,16 @@
 ---
 name: implementation
 description: >-
-  Start here to build code against a clear success criterion — test-first,
-  incremental, one work unit per fork.
+  Use when requirements are clear and code must be added, changed, or fixed
+  against an observable success criterion.
 context: fork
 agent: engineer
 ---
 <execution-contract>
-This phase is owned by `engineer`. When the host exposes named agents and you are the parent/orchestrator, delegate this phase to `engineer` and pass the prior artifact. If you are already that agent or delegation is unavailable, execute locally; never recursively delegate the same phase. Consume the design and plan, produce tested implementation in bounded slices, return unresolved defects or deviations, and hand off to `testing` only when work remains. Format the result with `actionable-communication`.
+This skill defines the implementation phase. Use the `engineer` agent when a bounded implementation can proceed independently; otherwise work locally. Produce tested changes in coherent slices and report material deviations.
 </execution-contract>
 
-Write and gate the phase artifact with `lifecycle-documentation`.
+Use `lifecycle-documentation` only when the result needs a durable artifact or handoff.
 
 <what-to-do>
 

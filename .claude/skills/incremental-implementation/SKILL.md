@@ -1,9 +1,8 @@
 ---
 name: incremental-implementation
 description: >-
-  Delivers changes incrementally. Use when implementing any feature or change
-  that touches more than one file. Use when you're about to write a large amount
-  of code at once, or when a task feels too big to land in one step.
+  Use when implementation should be split into multiple independently verifiable
+  slices or commits.
 ---
 # Incremental Implementation
 
@@ -36,7 +35,8 @@ For each slice:
 1. **Implement** the smallest complete piece of functionality
 2. **Test** — run the test suite (or write a test if none exists)
 3. **Verify** — confirm the slice does what the increment intended (tests pass, build succeeds, drive it and observe the result)
-4. **Commit** -- save your progress with a descriptive message (see `git-workflow-and-versioning` for atomic commit guidance)
+4. **Record** -- when the task includes commit authority, save the verified slice as an atomic
+   commit (see `git-workflow-and-versioning`)
 5. **Move to the next slice** — carry forward, don't restart
 
 ## Slicing Strategies
@@ -204,14 +204,14 @@ After each increment, verify:
 - [ ] Type checking passes (`npx tsc --noEmit`)
 - [ ] Linting passes (`npm run lint`)
 - [ ] The new functionality does what the increment intended — exercised via its test, or by driving the flow and observing the result
-- [ ] The change is committed with a descriptive message
+- [ ] When commit authority exists, the change is committed with a descriptive message
 
 ## Verification
 
 After completing all increments for a task:
 
-- [ ] Each increment was individually tested and committed
+- [ ] Each increment was individually tested and, when authorized, committed
 - [ ] The full test suite passes
 - [ ] The build is clean
 - [ ] The feature exercised end-to-end against the spec — an e2e test that passes, or driven and screenshotted
-- [ ] No uncommitted changes remain
+- [ ] The working tree state matches the task's requested delivery state

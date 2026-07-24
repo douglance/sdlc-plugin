@@ -1,18 +1,17 @@
 # Glossary
 
-Canonical definitions for the terms the SDLC plugin uses across skills and agents. Each term is
-defined **once, here**; skills point to this file instead of restating definitions, so a meaning
-changes in one place. For how the concepts relate, see
-[ONTOLOGY.md](ONTOLOGY.md).
+Definitions for the terms the SDLC plugin uses across rules, skills, and agent roles. For how the
+concepts relate, see [ontology.md](ontology.md). Canonical operational contracts remain under
+`.rulesync/`.
 
 ## Process & lifecycle
 
-**Phase** — one stage of the software lifecycle, exposed as a skill: feasibility-analysis,
-requirements-gathering, planning, design, implementation, testing, maintenance, deployment,
-documentation.
+**Phase** — an optional lifecycle transformation exposed as a skill. The phases are feasibility,
+requirements, planning, design, visual design, implementation, testing, quality, deployment,
+operations, documentation, and maintenance.
 
-**Artifact** (work product) — the output a phase produces and hands to the next: a spec, a plan, a
-design, code, a test report, docs, a release.
+**Artifact** — durable phase output with an owner, status, version, and scope. A conversational
+response is not automatically an artifact.
 
 **Scope** (in-scope / out-of-scope) — what a unit of work will and will not touch. The out-of-scope
 set is carried verbatim into every dispatch as a hard constraint; the plugin records it in the
@@ -26,10 +25,8 @@ the `incremental-implementation` skill.
 **Atomic commit** — a commit containing exactly one logical change, independently revertable, with a
 message describing why. Canonical guidance lives in `git-workflow-and-versioning`.
 
-**Milestone** — a checkpoint in a plan, composed of a series of atomic commits, reached when those
-commits exist and its verify command passes. The unit a plan is structured by; commits compose it.
-Replaces the phase/step *count* as the planning unit of measure. See **Vertical slice** and **Atomic
-commit**.
+**Milestone** — a checkpoint outcome containing one or more ordered tasks. Each task can contain one
+or more atomic commits when the task includes commit authority.
 
 **Nonfunctional requirement** (quality-of-service) — a requirement on *how well* the system behaves
 rather than what it does: performance, reliability, availability, security, usability, scalability.
@@ -138,9 +135,8 @@ doesn't depend on one person's memory.
 Terminology specific to this plugin — **not** standard SDLC. Listed here so it is never mistaken for
 canon.
 
-**Fork context** — the plugin's execution mechanism. A phase skill declares `context: fork` and an
-`agent:`, so invoking it runs that work in a fresh subagent with its own context window; the main
-thread coordinates and the fork executes.
+**Provider execution context** — the native mechanism a provider uses to execute an agent role.
+Claude can use a fork context; Codex and Grok use their native agent-profile mechanisms.
 
 **`out_of_scope`** — the literal field the plugin uses to record the out-of-scope set (see Scope),
 echoed into every dispatch as a hard prohibition.

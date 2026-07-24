@@ -1,15 +1,14 @@
 ---
 name: quality
 description: >-
-  Start here to assure a change is good — verification & validation,
-  review/inspection, and the quality attributes (performance, security,
-  reliability, usability) — beyond whether tests pass.
+  Use for independent verification, validation, inspection, and quality judgment
+  beyond whether tests pass.
 ---
 <execution-contract>
-This phase is owned by `quality-engineer`. When the host exposes named agents and you are the parent/orchestrator, delegate this phase to `quality-engineer` and pass the prior artifact. If you are already that agent or delegation is unavailable, execute locally; never recursively delegate the same phase. Consume the change, specification, and test evidence, produce a verification-and-validation gate verdict, return release-blocking findings, and hand off to `deployment` only after the gate passes. Format the result with `actionable-communication`.
+This skill defines the quality phase. Use the `quality-engineer` agent when an independent gate can proceed in parallel; otherwise work locally. Produce a verification-and-validation verdict with release-blocking findings.
 </execution-contract>
 
-Write and gate the phase artifact with `lifecycle-documentation`.
+Use `lifecycle-documentation` only when the result needs a durable artifact or handoff.
 
 <what-to-do>
 

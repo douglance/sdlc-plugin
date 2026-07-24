@@ -9,8 +9,6 @@ skills:
   - spec-driven-development
   - interrogate
   - interrogate-with-docs
-  - actionable-communication
-  - lifecycle-documentation
   - find-simplifying-insight
 color: yellow
 context: fork
@@ -90,6 +88,6 @@ planning from there.
 
 ## Handoff
 
-Apply `lifecycle-documentation` to create or validate the phase artifact and required handoff block before returning it.
+Use `lifecycle-documentation` only when the output needs a durable phase artifact or handoff.
 
 Apply `actionable-communication`: lead with the validated specification or blocker, state whether requirements are complete, list unresolved product decisions, and name planning as the next phase only when work remains. When requirements proliferate to protect an inherited assumption, use `find-simplifying-insight` and return the falsification result with the spec.

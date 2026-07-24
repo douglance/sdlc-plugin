@@ -1,0 +1,207 @@
+---
+name: spec-driven-development
+description: >-
+  Use when a significant change needs a durable specification before
+  implementation can begin safely.
+---
+# Spec-Driven Development
+
+Write the specification and its handoff with `lifecycle-documentation`.
+
+## When to Use
+
+- Starting a new project or feature
+- Requirements are ambiguous or incomplete
+- The change touches multiple files or modules
+- You're about to make an architectural decision
+- The task would take more than 30 minutes to implement
+
+**When NOT to use:** Single-line fixes, typo corrections, or changes where requirements are unambiguous and self-contained.
+
+## The Gated Workflow
+
+Spec-driven development has four phases. Do not advance to the next phase until the current one is validated.
+
+```
+SPECIFY ──→ PLAN ──→ TASKS ──→ IMPLEMENT
+   │          │        │          │
+   ▼          ▼        ▼          ▼
+ Human      Human    Human      Human
+ reviews    reviews  reviews    reviews
+```
+
+### Phase 1: Specify
+
+Start with a high-level vision. Ask the human clarifying questions until requirements are concrete.
+
+**Surface assumptions immediately.** Before writing any spec content, list what you're assuming:
+
+```
+ASSUMPTIONS I'M MAKING:
+1. This is a web application (not native mobile)
+2. Authentication uses session-based cookies (not JWT)
+3. The database is PostgreSQL (based on existing Prisma schema)
+4. We're targeting modern browsers only (no IE11)
+→ Correct me now or I'll proceed with these.
+```
+
+Don't silently fill in ambiguous requirements.
+
+**Build an evidence base before arguing for a requirement.** Search the repository for the closest existing behavior, contract, data model, test, and operational convention. Cite exact `path:line` locations. For each analogue, explain what is reusable and where the analogy stops. When no prior art exists, record the search commands and result instead of implying precedent.
+
+Separate statements explicitly:
+
+- **Observation** — directly established by code, tests, runtime output, or a primary source.
+- **Inference** — a conclusion drawn from cited observations.
+- **Decision/recommendation** — a chosen trade-off, with rejected alternatives and evidence.
+
+When the candidate specification needs many exceptions, adapters, or compensating rules, invoke
+`find-simplifying-insight` before freezing it. Preserve the current model as the null hypothesis;
+record the candidate model, what it eliminates, its novel prediction, and the cheapest decisive
+falsification test. Do not accept elegance by itself as evidence.
+
+Use current primary-source links for external standards, framework contracts, or research claims. Include the relevant version or publication date; do not use external convention to overrule observed repository behavior.
+
+**Write a spec document covering these six core areas:**
+
+1. **Objective** — What are we building and why? Who is the user? What does success look like?
+
+2. **Commands** — Full executable commands with flags, not just tool names.
+   ```
+   Build: npm run build
+   Test: npm test -- --coverage
+   Lint: npm run lint --fix
+   Dev: npm run dev
+   ```
+
+3. **Project Structure** — Where source code lives, where tests go, where docs belong.
+   ```
+   src/           → Application source code
+   src/components → React components
+   src/lib        → Shared utilities
+   tests/         → Unit and integration tests
+   e2e/           → End-to-end tests
+   docs/          → Documentation
+   ```
+
+4. **Code Style** — Include naming conventions, formatting rules, and examples of good output.
+
+5. **Testing Strategy** — What framework, where tests live, coverage expectations, which test levels for which concerns.
+
+6. **Boundaries** — Three-tier system:
+   - **Always do:** Run tests before commits, follow naming conventions, validate inputs
+   - **Ask first:** Database schema changes, adding dependencies, changing CI config
+   - **Never do:** Commit secrets, edit vendor directories, remove failing tests without approval
+
+**Spec template:**
+
+```markdown
+# Spec: [Project/Feature Name]
+
+## Objective
+[What we're building and why. User stories or acceptance criteria.]
+
+## Tech Stack
+[Framework, language, key dependencies with versions]
+
+## Nonfunctional Requirements
+[Measurable quality-of-service targets — performance, reliability, security, scalability]
+
+## Evidence and Prior Art
+| Requirement / claim | Evidence | Interpretation and limits | Confidence |
+| --- | --- | --- | --- |
+| REQ-001 | `src/example.ts:42-67` | Existing analogue; reuse validation flow, not storage model | High |
+
+## Commands
+[Build, test, lint, dev — full commands]
+
+## Project Structure
+[Directory layout with descriptions]
+
+## Code Style
+[Example snippet + key conventions]
+
+## Testing Strategy
+[Framework, test locations, coverage requirements, test levels]
+
+## Boundaries
+- Always: [...]
+- Ask first: [...]
+- Never: [...]
+
+## Success Criteria
+[How we'll know this is done — specific, testable conditions]
+
+## Open Questions
+[Anything unresolved that needs human input]
+```
+
+**Reframe instructions as success criteria.** When receiving vague requirements, translate them into concrete conditions:
+
+```
+REQUIREMENT: "Make the dashboard faster"
+
+REFRAMED SUCCESS CRITERIA:
+- Dashboard LCP < 2.5s on 4G connection
+- Initial data load completes in < 500ms
+- No layout shift during load (CLS < 0.1)
+→ Are these the right targets?
+```
+
+### Phase 2: Plan
+
+With the validated spec, generate a technical implementation plan:
+
+1. Identify the major components and their dependencies
+2. Determine the implementation order (what must be built first)
+3. Note risks and mitigation strategies
+4. Identify what can be built in parallel vs. what must be sequential
+5. Define verification checkpoints between phases
+
+The plan should be reviewable: the human should be able to read it and say "yes, that's the right approach" or "no, change X."
+
+### Phase 3: Tasks
+
+Break the plan into discrete, implementable tasks:
+
+- Each task should be completable in a single focused session
+- Each task has explicit acceptance criteria
+- Each task includes a verification step (test, build, or a driven observation)
+- Tasks are ordered by dependency, not by perceived importance
+- Each task lands as a commit (one logical change); a milestone groups the tasks/commits that reach a checkpoint
+
+**Task template:**
+```markdown
+- [ ] Task: [Description]
+  - Acceptance: [What must be true when done]
+  - Verify: [How to confirm — test command, build, or an observation you make (drive the flow / screenshot the result)]
+  - Files: [Which files will be touched]
+  - Traces: [Requirement IDs this task implements]
+```
+
+### Phase 4: Implement
+
+Execute tasks one at a time following `incremental-implementation` and `test-driven-development` skills. Use `context-engineering` to load the right spec sections and source files at each step rather than flooding the agent with the entire spec.
+
+## Keeping the Spec Alive
+
+The spec is a living document, not a one-time artifact:
+
+- **Update when decisions change** — If you discover the data model needs to change, update the spec first, then implement.
+- **Update when scope changes** — Features added or cut should be reflected in the spec.
+- **Commit the spec** — The spec belongs in version control alongside the code.
+- **Reference the spec in PRs** — Link back to the spec section that each PR implements.
+
+## Verification
+
+Before proceeding to implementation, confirm:
+
+- [ ] The spec covers all six core areas
+- [ ] A human other than the agent has reviewed and approved the spec (external sign-off — the agent cannot tick this itself)
+- [ ] Success criteria are specific and testable
+- [ ] Every material repository claim cites exact `path:line` evidence
+- [ ] Each substantial requirement names concrete prior art or records the unsuccessful search for it
+- [ ] Observations, inferences, and recommendations are distinguishable
+- [ ] External claims cite current primary sources with version/date when relevant
+- [ ] Boundaries (Always/Ask First/Never) are defined
+- [ ] The spec is saved to a file in the repository

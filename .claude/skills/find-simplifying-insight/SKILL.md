@@ -1,10 +1,8 @@
 ---
 name: find-simplifying-insight
 description: >-
-  Searches for a falsifiable simpler model when rules, exceptions, adapters, or
-  compensating processes have proliferated. Use during research, requirements,
-  planning, architecture, or maintenance when the underlying model may be wrong;
-  do not use for routine cleanup where the model is already sound.
+  Use when proliferating rules, exceptions, adapters, or workarounds suggest the
+  underlying model may be wrong and a falsifiable simpler model is needed.
 ---
 # Find Simplifying Insight
 

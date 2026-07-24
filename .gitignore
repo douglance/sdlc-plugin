@@ -1,1 +1,6 @@
 .reference/
+node_modules/
+
+# Generated provider rules are committed with the plugin.
+!AGENTS.md
+!CLAUDE.md

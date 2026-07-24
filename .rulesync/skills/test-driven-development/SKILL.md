@@ -1,0 +1,355 @@
+---
+name: test-driven-development
+description: >-
+  Use when a behavior change or defect is best defined and protected by a
+  failing test before implementation.
+targets:
+  - '*'
+---
+# Test-Driven Development
+
+## When to Use
+
+- Implementing any new logic or behavior
+- Fixing any bug (write a regression test first)
+- Modifying existing functionality
+- Adding edge case handling
+- Any change that could break existing behavior
+
+**When NOT to use:** Pure configuration changes, documentation updates, or static content changes that have no behavioral impact.
+
+**Related:** For browser-based changes, combine TDD with runtime verification using Chrome DevTools MCP — see the Browser Testing section below.
+
+## The TDD Cycle
+
+```
+    RED                GREEN              REFACTOR
+ Write a test    Write minimal code    Clean up the
+ that fails  ──→  to make it pass  ──→  implementation  ──→  (repeat)
+      │                  │                    │
+      ▼                  ▼                    ▼
+   Test FAILS        Test PASSES         Tests still PASS
+```
+
+### Step 1: RED — Write a Failing Test
+
+Write the test first. It must fail. A test that passes immediately proves nothing. RED also requires observing the test fail **on its assertion, for the reason you expect** — not merely that the test errors.
+
+A test that fails only because a symbol/import is missing or the code doesn't compile is a **weak RED**: the assertion never ran, so it proves nothing about the behavior. Strong RED = the code exists and compiles, and the assertion fails because the behavior is wrong.
+
+```typescript
+// Weak RED: fails only because createTask doesn't exist yet — the assertion never ran.
+// Strong RED: this temporary stub compiles and reaches the assertion, but returns
+// deliberately wrong behavior. GREEN replaces the stub with the real behavior.
+class TaskService {
+  async createTask(input: { title: string }) {
+    return {
+      id: 'stub',
+      title: input.title,
+      status: 'not-implemented',
+      createdAt: new Date(0),
+    };
+  }
+}
+
+const taskService = new TaskService();
+
+describe('TaskService', () => {
+  it('creates a task with title and default status', async () => {
+    const task = await taskService.createTask({ title: 'Buy groceries' });
+
+    expect(task.id).toBeDefined();
+    expect(task.title).toBe('Buy groceries');
+    expect(task.status).toBe('pending');
+    expect(task.createdAt).toBeInstanceOf(Date);
+  });
+});
+```
+
+Strong RED reaches the `status` assertion and reports `expected "pending", received "not-implemented"`. An import, compile, or setup error is still weak RED because no behavioral assertion ran.
+
+### Step 2: GREEN — Make It Pass
+
+Write the minimum code to make the test pass. Don't over-engineer:
+
+```typescript
+// GREEN: Minimal implementation
+export async function createTask(input: { title: string }): Promise<Task> {
+  const task = {
+    id: generateId(),
+    title: input.title,
+    status: 'pending' as const,
+    createdAt: new Date(),
+  };
+  await db.tasks.insert(task);
+  return task;
+}
+```
+
+### Step 3: REFACTOR — Clean Up
+
+With tests green, improve the code without changing behavior:
+
+- Extract shared logic
+- Improve naming
+- Remove duplication
+- Optimize if necessary
+
+Run tests after every refactor step to confirm nothing broke.
+
+## Regression Tests for Bug Fixes
+
+When a bug is reported, **do not start by trying to fix it.** Start by writing a test that reproduces it.
+
+```
+Bug report arrives
+       │
+       ▼
+  Write a test that demonstrates the bug
+       │
+       ▼
+  Test FAILS (confirming the bug exists)
+       │
+       ▼
+  Implement the fix
+       │
+       ▼
+  Test PASSES (proving the fix works)
+       │
+       ▼
+  Run full test suite (no regressions)
+```
+
+**Example:**
+
+```typescript
+// Bug: "Completing a task doesn't update the completedAt timestamp"
+
+// Step 1: Write the reproduction test (it should FAIL)
+it('sets completedAt when task is completed', async () => {
+  const task = await taskService.createTask({ title: 'Test' });
+  const completed = await taskService.completeTask(task.id);
+
+  expect(completed.status).toBe('completed');
+  expect(completed.completedAt).toBeInstanceOf(Date);  // This fails → bug confirmed
+});
+
+// Step 2: Fix the bug
+export async function completeTask(id: string): Promise<Task> {
+  return db.tasks.update(id, {
+    status: 'completed',
+    completedAt: new Date(),  // This was missing
+  });
+}
+
+// Step 3: Test passes → bug fixed, regression guarded
+```
+
+## The Test Pyramid
+
+Invest testing effort according to the pyramid — most tests should be small and fast, with progressively fewer tests at higher levels:
+
+```
+          ╱╲
+         ╱  ╲         E2E Tests (~5%)
+        ╱    ╲        Full user flows, real browser
+       ╱──────╲
+      ╱        ╲      Integration Tests (~15%)
+     ╱          ╲     Component interactions, API boundaries
+    ╱────────────╲
+   ╱              ╲   Unit Tests (~80%)
+  ╱                ╲  Pure logic, isolated, milliseconds each
+ ╱──────────────────╲
+```
+
+### Test Sizes (Resource Model)
+
+Classify tests by what resources they consume:
+
+| Size | Constraints | Speed | Example |
+|------|------------|-------|---------|
+| **Small** | Single process, no I/O, no network, no database | Milliseconds | Pure function tests, data transforms |
+| **Medium** | Multi-process OK, localhost only, no external services | Seconds | API tests with test DB, component tests |
+| **Large** | Multi-machine OK, external services allowed | Minutes | E2E tests, performance benchmarks, staging integration |
+
+Small tests should make up the vast majority of your suite.
+
+### Decision Guide
+
+```
+Is it pure logic with no side effects?
+  → Unit test (small)
+
+Does it cross a boundary (API, database, file system)?
+  → Integration test (medium)
+
+Is it a critical user flow that must work end-to-end?
+  → E2E test (large) — limit these to critical paths
+```
+
+## Choosing Test Cases (Techniques)
+
+Pick the technique that fits what's under test:
+
+- **Specification-based (black-box)** — derive cases from the contract: equivalence partitions, boundary values, decision tables. The default for behavior.
+- **Structure-based (white-box)** — once spec-based cases pass, use coverage to find untested branches and paths and close them. Coverage is a gap-finder, not a target to game.
+- **Fault-based (mutation)** — when a suite must be trustworthy, mutate the code and confirm a test fails; a surviving mutant means a missing assertion.
+
+Cover the happy path with spec-based cases, the unhappy paths with negative testing, then close branch gaps with structure-based cases.
+
+## Test Oracles (What to Assert)
+
+A **test oracle** is how the test decides pass from fail — a weak oracle stays green while behavior breaks. Choose it deliberately:
+
+- Assert against the **spec / acceptance criteria** (the primary oracle).
+- For a bug, the oracle is the **regression test** that reproduces the defect.
+- For complex output, compare to a **golden/approved result** or assert **invariant properties**.
+- Assert observable **state and outputs**, never internal call sequences (see Test State, Not Interactions).
+
+## Writing Good Tests
+
+### Test State, Not Interactions
+
+Assert on the *outcome* of an operation, not on which methods were called internally. Tests that verify method call sequences break when you refactor, even if the behavior is unchanged.
+
+```typescript
+// Good: Tests what the function does (state-based)
+it('returns tasks sorted by creation date, newest first', async () => {
+  const tasks = await listTasks({ sortBy: 'createdAt', sortOrder: 'desc' });
+  expect(tasks[0].createdAt.getTime())
+    .toBeGreaterThan(tasks[1].createdAt.getTime());
+});
+
+// Bad: Tests how the function works internally (interaction-based)
+it('calls db.query with ORDER BY created_at DESC', async () => {
+  await listTasks({ sortBy: 'createdAt', sortOrder: 'desc' });
+  expect(db.query).toHaveBeenCalledWith(
+    expect.stringContaining('ORDER BY created_at DESC')
+  );
+});
+```
+
+### DAMP Over DRY in Tests
+
+In production code, DRY (Don't Repeat Yourself) is usually right. In tests, **DAMP (Descriptive And Meaningful Phrases)** is better. A test should read like a specification — each test should tell a complete story without requiring the reader to trace through shared helpers.
+
+```typescript
+// DAMP: Each test is self-contained and readable
+it('rejects tasks with empty titles', () => {
+  const input = { title: '', assignee: 'user-1' };
+  expect(() => createTask(input)).toThrow('Title is required');
+});
+
+it('trims whitespace from titles', () => {
+  const input = { title: '  Buy groceries  ', assignee: 'user-1' };
+  const task = createTask(input);
+  expect(task.title).toBe('Buy groceries');
+});
+
+// Over-DRY: Shared setup obscures what each test actually verifies
+// (Don't do this just to avoid repeating the input shape)
+```
+
+Duplication in tests is acceptable when it makes each test independently understandable.
+
+### Prefer Real Implementations Over Mocks
+
+Use the simplest test double that gets the job done. The more your tests use real code, the more confidence they provide.
+
+```
+Preference order (most to least preferred):
+1. Real implementation  → Highest confidence, catches real bugs
+2. Fake                 → In-memory version of a dependency (e.g., fake DB)
+3. Stub                 → Returns canned data, no behavior
+4. Mock (interaction)   → Verifies method calls — use sparingly
+```
+
+**Use mocks only when:** the real implementation is too slow, non-deterministic, or has side effects you can't control (external APIs, email sending). Over-mocking creates tests that pass while production breaks.
+
+### Use the Arrange-Act-Assert Pattern
+
+```typescript
+it('marks overdue tasks when deadline has passed', () => {
+  // Arrange: Set up the test scenario
+  const task = createTask({
+    title: 'Test',
+    deadline: new Date('2025-01-01'),
+  });
+
+  // Act: Perform the action being tested
+  const result = checkOverdue(task, new Date('2025-01-02'));
+
+  // Assert: Verify the outcome
+  expect(result.isOverdue).toBe(true);
+});
+```
+
+### One Assertion Per Concept
+
+```typescript
+// Good: Each test verifies one behavior
+it('rejects empty titles', () => { ... });
+it('trims whitespace from titles', () => { ... });
+it('enforces maximum title length', () => { ... });
+
+// Bad: Everything in one test
+it('validates titles correctly', () => {
+  expect(() => createTask({ title: '' })).toThrow();
+  expect(createTask({ title: '  hello  ' }).title).toBe('hello');
+  expect(() => createTask({ title: 'a'.repeat(256) })).toThrow();
+});
+```
+
+### Name Tests Descriptively
+
+```typescript
+// Good: Reads like a specification
+describe('TaskService.completeTask', () => {
+  it('sets status to completed and records timestamp', ...);
+  it('throws NotFoundError for non-existent task', ...);
+  it('is idempotent — completing an already-completed task is a no-op', ...);
+  it('sends notification to task assignee', ...);
+});
+
+// Bad: Vague names
+describe('TaskService', () => {
+  it('works', ...);
+  it('handles errors', ...);
+  it('test 3', ...);
+});
+```
+
+## Test Anti-Patterns to Avoid
+
+> Common test anti-patterns and their fixes: see [ANTI-PATTERNS.md](ANTI-PATTERNS.md).
+
+## Browser Testing with DevTools
+
+> For verifying browser/UI changes at runtime (DOM, console, network, screenshots), use the `browser-testing-with-devtools` skill alongside this TDD loop.
+
+## When to Use Subagents for Testing
+
+For complex bug fixes, spawn a subagent to write the reproduction test:
+
+```
+Main agent: "Spawn a subagent to write a test that reproduces this bug:
+[bug description]. The test should fail with the current code."
+
+Subagent: Writes the reproduction test
+
+Main agent: Verifies the test fails, then implements the fix,
+then verifies the test passes.
+```
+
+This separation ensures the test is written without knowledge of the fix, making it more robust.
+
+## Verification
+
+After completing any implementation:
+
+- [ ] Every new behavior has a corresponding test
+- [ ] All tests pass: `npm test`
+- [ ] Bug fixes include a reproduction test that failed before the fix
+- [ ] Test names describe the behavior being verified
+- [ ] No tests were skipped or disabled
+- [ ] Coverage hasn't decreased (if tracked)

@@ -1,9 +1,8 @@
 ---
 name: planning-and-task-breakdown
 description: >-
-  Breaks work into milestones containing ordered tasks and atomic commits. Use
-  when you have a spec or clear requirements and need implementable vertical
-  slices, scope estimates, dependency order, or parallel work boundaries.
+  Use when an accepted specification or plan must become ordered tasks, vertical
+  slices, atomic commits, or parallel work boundaries.
 ---
 # Planning and Task Breakdown
 

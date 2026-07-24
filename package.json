@@ -1,0 +1,21 @@
+{
+  "name": "sdlc-plugin",
+  "version": "0.5.1",
+  "private": true,
+  "scripts": {
+    "generate": "rulesync generate --config rulesync.jsonc --input-root .",
+    "generate:claude": "rulesync generate --input-root . --targets claudecode --features rules,subagents,skills --output-roots .",
+    "generate:codex": "rulesync generate --input-root . --targets codexcli --features rules,subagents,skills --output-roots .",
+    "generate:grok": "rulesync generate --input-root . --targets grokcli --features rules,subagents,skills --output-roots .",
+    "check": "rulesync generate --config rulesync.jsonc --input-root . --check",
+    "validate": "pnpm check && node scripts/validate.mjs && node --test tests/*.test.mjs",
+    "test:consumers": "node scripts/test-consumers.mjs",
+    "test:consumers:discovery": "node scripts/test-consumers.mjs --discovery-only",
+    "test:consumers:natural": "node scripts/test-consumers.mjs --provider claude --natural-triggers",
+    "install:codex-agents": "node scripts/install-codex-agents.mjs"
+  },
+  "devDependencies": {
+    "rulesync": "14.0.1"
+  },
+  "packageManager": "pnpm@10.15.1"
+}

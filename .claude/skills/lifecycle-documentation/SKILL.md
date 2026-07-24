@@ -1,11 +1,8 @@
 ---
 name: lifecycle-documentation
 description: >-
-  Create or review traceable software lifecycle documents and phase handoffs in
-  controlled technical English. Use for requirements specifications, project
-  plans, design descriptions, configuration records, test documentation, quality
-  plans, V&V reports, user documentation, reviews, audits, or any SDLC phase
-  artifact that another person or agent must consume.
+  Use to create or review a formal, traceable lifecycle artifact or phase
+  handoff that another person or system must consume.
 ---
 # Lifecycle Documentation
 
@@ -13,8 +10,9 @@ Create the smallest lifecycle artifact that lets the next phase work without gue
 information model of the applicable IEEE/ISO standard. Do not add ceremonial sections that do not
 help a decision, action, or verification.
 
-Preserve the linear phase boundary. Do not combine artifacts owned by different phases, skip a
-receiver, or address one handoff to multiple downstream phases. Standards tailoring can combine
+Preserve point-to-point ownership at each selected lifecycle edge. Do not combine artifacts owned
+by different phases, skip an immediate receiver, or address one handoff to multiple downstream
+phases. The lifecycle graph can branch between handoffs. Standards tailoring can combine
 information only when one phase owns all combined content.
 
 Read [references/standards-and-style.md](references/standards-and-style.md) before you select the
@@ -43,7 +41,8 @@ dictionary, and a conformance review are available.
 - Put one topic in each paragraph. Use lists for complex conditions.
 - Do not omit the subject, verb, or article to make text shorter.
 - Replace vague words with a value, condition, owner, date, or measurable threshold.
-- Use `shall` for a binding product requirement, `should` for a recommendation, and `may` for permission.
+- Use declared uppercase BCP 14 keywords for project requirements. Preserve `shall` only when a
+  governing external standard or contract requires it.
 - Do not use `and/or`. Split the cases or name the exact logical operator.
 
 Do not rewrite code, identifiers, commands, logs, quoted evidence, legal text, or standard titles.

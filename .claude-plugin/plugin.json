@@ -1,25 +1,10 @@
 {
   "name": "sdlc",
-  "description": "A linear software delivery lifecycle with explicit phase handoffs, specialized agents, and reusable engineering skills.",
+  "description": "An adaptable software-delivery lifecycle with explicit handoffs, specialist agent roles, and reusable engineering skills.",
   "version": "0.5.1",
   "author": { "name": "Doug Lance" },
   "homepage": "https://github.com/douglance/sdlc-plugin",
   "repository": "https://github.com/douglance/sdlc-plugin",
   "license": "MIT",
-  "keywords": ["sdlc", "agents", "skills", "workflow"],
-  "skills": "./.claude/skills/",
-  "agents": [
-    "./.claude/agents/architect.md",
-    "./.claude/agents/engineer.md",
-    "./.claude/agents/graphic-designer.md",
-    "./.claude/agents/maintainer.md",
-    "./.claude/agents/product-owner.md",
-    "./.claude/agents/project-manager.md",
-    "./.claude/agents/quality-engineer.md",
-    "./.claude/agents/release-engineer.md",
-    "./.claude/agents/researcher.md",
-    "./.claude/agents/sre.md",
-    "./.claude/agents/technical-writer.md",
-    "./.claude/agents/tester.md"
-  ]
+  "keywords": ["sdlc", "agents", "skills", "workflow"]
 }

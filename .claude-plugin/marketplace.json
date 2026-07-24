@@ -1,12 +1,12 @@
 {
   "name": "sdlc-marketplace",
   "owner": { "name": "Doug Lance" },
-  "metadata": { "description": "A linear SDLC with explicit handoffs, specialized agents, and reusable skills." },
+  "metadata": { "description": "An adaptable SDLC with explicit handoffs, specialist agent roles, and reusable skills." },
   "plugins": [
     {
       "name": "sdlc",
-      "source": "./",
-      "description": "A linear SDLC with explicit handoffs, specialized agents, and reusable skills."
+      "source": "./.claude",
+      "description": "An adaptable SDLC with explicit handoffs, specialist agent roles, and reusable skills."
     }
   ]
 }

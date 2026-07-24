@@ -2,7 +2,7 @@
   "name": "sdlc-marketplace",
   "interface": {
     "displayName": "SDLC",
-    "shortDescription": "Linear delivery phases with explicit handoffs"
+    "shortDescription": "Adaptable delivery phases with explicit handoffs"
   },
   "plugins": [
     {

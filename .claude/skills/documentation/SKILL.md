@@ -1,16 +1,16 @@
 ---
 name: documentation
 description: >-
-  Start here to document what shipped — READMEs, API docs, ADRs, and usage —
-  once a feature lands or an interface changes.
+  Use after behavior ships or an interface changes when documentation must be
+  created, corrected, or verified against the source.
 context: fork
 agent: technical-writer
 ---
 <execution-contract>
-This phase is owned by `technical-writer`. When the host exposes named agents and you are the parent/orchestrator, delegate this phase to `technical-writer` and pass the prior artifact. If you are already that agent or delegation is unavailable, execute locally; never recursively delegate the same phase. Consume shipped behavior and verified interfaces, produce documentation checked against the source and working commands, return unresolved mismatches, and identify the next lifecycle consumer only when work remains. Format the result with `actionable-communication`.
+This skill defines the documentation phase. Use the `technical-writer` agent when bounded documentation work can proceed independently; otherwise work locally. Verify commands, interfaces, and examples against shipped behavior.
 </execution-contract>
 
-Write and gate the phase artifact with `lifecycle-documentation`.
+Use `lifecycle-documentation` only when the result needs a durable artifact or handoff.
 
 <what-to-do>
 

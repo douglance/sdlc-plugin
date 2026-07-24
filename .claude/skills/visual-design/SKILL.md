@@ -1,17 +1,16 @@
 ---
 name: visual-design
 description: >-
-  Start here for user-facing UI/visual work — layout, visual hierarchy,
-  composition, states, and accessibility — and to verify a rendered change
-  actually looks right.
+  Use when creating or reviewing a user-facing layout, state, illustration,
+  document, slide, motion treatment, or rendered visual result.
 context: fork
 agent: graphic-designer
 ---
 <execution-contract>
-This phase is owned by `graphic-designer`. When the host exposes named agents and you are the parent/orchestrator, delegate this phase to `graphic-designer` and pass the prior artifact. If you are already that agent or delegation is unavailable, execute locally; never recursively delegate the same phase. Consume the product requirements and current surface, produce the visual design plus rendered evidence, return unresolved states or accessibility issues, and hand off to `implementation` or `quality` only when work remains. Format the result with `actionable-communication`.
+This skill defines the visual-design phase. Use the `graphic-designer` agent when a bounded visual task can proceed independently; otherwise work locally. Produce the design, rendered evidence, and any unresolved state or accessibility issue.
 </execution-contract>
 
-Write and gate the phase artifact with `lifecycle-documentation`.
+Use `lifecycle-documentation` only when the result needs a durable artifact or handoff.
 
 <what-to-do>
 
@@ -33,7 +32,9 @@ Design and verify the user-facing surface. Work from the user's task, design the
 
 ## Visual verification (non-negotiable)
 
-LOOK before declaring done. A passing test and a clean console do not prove it looks right — the screenshot is the test. Judge the whole composition, not just what you changed, and iterate until it is both visually coherent and specific to the brief. Check that implementation did not drift into a familiar default pattern even when individual components look polished.
+LOOK before declaring done. A passing behavioral test and a clean console do not verify visual
+composition. Inspect a rendered capture, judge the whole composition, and use that capture as
+evidence for visual claims. Iterate until the result is coherent and specific to the brief.
 
 When the browser tooling supports it (e.g. an annotate mode), offer the user an on-page markup loop — they draw boxes and comments directly on the live render and you consume the annotated screenshot — instead of relying only on text descriptions of what's wrong.
 

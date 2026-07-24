@@ -1,22 +1,23 @@
 ---
 name: testing
 description: >-
-  Start here to adversarially validate a change — edge cases, failure modes, and
-  security — and try to break it before shipping.
+  Use after implementation to probe edge cases, failure modes, malformed input,
+  scale, security, and contradictions.
 context: fork
 agent: tester
 ---
 <execution-contract>
-This phase is owned by `tester`. When the host exposes named agents and you are the parent/orchestrator, delegate this phase to `tester` and pass the prior artifact. If you are already that agent or delegation is unavailable, execute locally; never recursively delegate the same phase. Consume the implementation, specification, and existing test evidence, produce an adversarial verdict with reproducible cases, return unresolved defects, and hand off to `quality` only when testing passes. Format the result with `actionable-communication`.
+This skill defines the testing phase. Use the `tester` agent when bounded adversarial validation can proceed independently; otherwise work locally. Produce reproducible cases and a clear verdict.
 </execution-contract>
 
-Write and gate the phase artifact with `lifecycle-documentation`.
+Use `lifecycle-documentation` only when the result needs a durable artifact or handoff.
 
 <what-to-do>
 
 Try to break it — **falsify** the change. Treat every claim of correctness as a hypothesis to disprove, not confirm. Run the existing tests first, then attack.
 
-A claim is only validated when a test proves it. "It looks right" is not evidence.
+A behavioral claim is validated only when an executable test supports it. Visual, accessibility,
+process, and quality claims require evidence appropriate to those claims.
 
 </what-to-do>
 

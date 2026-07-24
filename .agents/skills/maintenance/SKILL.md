@@ -1,14 +1,14 @@
 ---
 name: maintenance
 description: >-
-  Start here to clean up the codebase — remove dead code, simplify, and reduce
-  complexity without changing behavior.
+  Use to remove dead code, duplication, indirection, or unnecessary complexity
+  while preserving behavior.
 ---
 <execution-contract>
-This phase is owned by `maintainer`. When the host exposes named agents and you are the parent/orchestrator, delegate this phase to `maintainer` and pass the prior artifact. If you are already that agent or delegation is unavailable, execute locally; never recursively delegate the same phase. Consume the working system and a bounded debt target, produce behavior-preserving simplification with before-and-after proof, return unsafe cuts, and hand off to `testing` or `quality` only when work remains. Format the result with `actionable-communication`.
+This skill defines the maintenance phase. Use the `maintainer` agent when a bounded cleanup can proceed independently; otherwise work locally. Produce behavior-preserving simplification with before-and-after evidence.
 </execution-contract>
 
-Write and gate the phase artifact with `lifecycle-documentation`.
+Use `lifecycle-documentation` only when the result needs a durable artifact or handoff.
 
 <what-to-do>
 

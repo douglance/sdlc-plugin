@@ -14,7 +14,7 @@ A way of conceiving the whole software lifecycle as a series of distinct concern
 
 ---
 
-# The lifecycle is a chain of distinct **concerns.**
+# The lifecycle is a graph of distinct **concerns.**
 
 Feasibility, requirements, planning, design, building, testing, quality, shipping, operating, maintaining.
 
@@ -48,7 +48,7 @@ What's out of scope is as binding as what's in it.
 
 ---
 
-# The stance is **falsification.**
+# The stance is **challenge assumptions.**
 
 Requirements and correctness are hypotheses to *disprove*, not confirm.
 
@@ -66,7 +66,7 @@ By *execution* — a reproducible failing case.
 
 ---
 
-## The pipeline
+## The default path
 
 ```
 feasibility → requirements → planning → design → visual design
@@ -75,6 +75,8 @@ feasibility → requirements → planning → design → visual design
    ↺ what you learn in production
      re-enters as new requirements, or a bug to root-cause
 ```
+
+Start at the smallest applicable concern. Skip concerns the work does not need.
 
 ---
 

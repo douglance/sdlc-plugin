@@ -1,0 +1,13 @@
+{
+  "$schema": "https://raw.githubusercontent.com/dyoshikawa/rulesync/main/schema/rulesync.schema.json",
+  "targets": {
+    "claudecode": ["rules", "subagents", "skills"],
+    "codexcli": ["rules", "subagents", "skills"],
+    "grokcli": ["rules", "subagents", "skills"]
+  },
+  "outputRoots": ["."],
+  "delete": true,
+  "verbose": false,
+  "silent": false,
+  "global": false
+}

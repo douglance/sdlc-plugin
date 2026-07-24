@@ -1,0 +1,10 @@
+{
+  "name": "sdlc",
+  "description": "An adaptable software-delivery lifecycle with explicit handoffs, specialist agent roles, and reusable engineering skills.",
+  "version": "0.5.1",
+  "author": { "name": "Doug Lance" },
+  "homepage": "https://github.com/douglance/sdlc-plugin",
+  "repository": "https://github.com/douglance/sdlc-plugin",
+  "license": "MIT",
+  "keywords": ["sdlc", "agents", "skills", "workflow"]
+}

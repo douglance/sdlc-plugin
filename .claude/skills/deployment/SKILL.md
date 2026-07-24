@@ -1,16 +1,16 @@
 ---
 name: deployment
 description: >-
-  Start here to ship built-and-tested code to its target safely — release steps,
-  rollout, smoke checks, and rollback.
+  Use when tested code must be released with versioning, rollout, smoke checks,
+  and a rollback path.
 context: fork
 agent: release-engineer
 ---
 <execution-contract>
-This phase is owned by `release-engineer`. When the host exposes named agents and you are the parent/orchestrator, delegate this phase to `release-engineer` and pass the prior artifact. If you are already that agent or delegation is unavailable, execute locally; never recursively delegate the same phase. Consume a green exact commit and release criteria, produce the deployed version, smoke evidence, and rollback path, return unresolved release risks, and hand off to `operations` only after the target is healthy. Format the result with `actionable-communication`.
+This skill defines the deployment phase. Use the `release-engineer` agent when a bounded release task can proceed independently; otherwise work locally. Produce deployed-version evidence, smoke results, and a rollback path.
 </execution-contract>
 
-Write and gate the phase artifact with `lifecycle-documentation`.
+Use `lifecycle-documentation` only when the result needs a durable artifact or handoff.
 
 <what-to-do>
 

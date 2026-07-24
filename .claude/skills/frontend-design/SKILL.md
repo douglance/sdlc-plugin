@@ -1,10 +1,8 @@
 ---
 name: frontend-design
 description: >-
-  Build distinctive, production-grade frontend interfaces with a committed art
-  direction, a signature element, and token-driven styling — zero recognizable
-  AI tropes. Use when authoring new UI, a landing page, a design system, or
-  restyling an existing surface.
+  Use when building or restyling a user-facing web interface where art direction
+  and production-quality visual execution matter.
 context: fork
 agent: graphic-designer
 ---
@@ -136,6 +134,6 @@ When reviewing or refining existing UI, report every finding as a **Before / Aft
 
 ## Final quality gate (all must be true before delivery)
 
-Signature element exists and is functional · tokens drive styling · accessibility met · all interaction states implemented · failure and recovery states designed · narrative consistency holds · responsive rhythm preserved · prompt-specific choices survive the swap test · charts are truthful and legible · no unearned AI tropes. Then hand off to visual verification (`visual-design`): the screenshot is the test.
+Signature element exists and is functional · tokens drive styling · accessibility met · all interaction states implemented · failure and recovery states designed · narrative consistency holds · responsive rhythm preserved · prompt-specific choices survive the swap test · charts are truthful and legible · no unearned AI tropes. Then hand off to `visual-design` for rendered inspection and visual evidence.
 
 </supporting-info>

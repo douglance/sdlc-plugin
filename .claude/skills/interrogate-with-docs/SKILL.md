@@ -1,11 +1,8 @@
 ---
 name: interrogate-with-docs
 description: >-
-  Interrogation session that challenges your plan, design, spec, or approach
-  against the existing domain model, sharpens terminology, and updates
-  documentation (CONTEXT.md, ADRs) inline as decisions crystallise. Use when you
-  want terminology sharpened and project docs updated while you defend a plan
-  against its documented domain model.
+  Use when the user wants a proposal stress-tested against the domain model
+  while terminology and project decision records are updated.
 user-invocable: true
 ---
 <what-to-do>

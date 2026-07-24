@@ -1,9 +1,8 @@
 ---
 name: git-workflow-and-versioning
 description: >-
-  Structures git workflow practices. Use when making any code change. Use when
-  committing, branching, resolving conflicts, or when you need to organize work
-  across multiple parallel streams.
+  Use for commits, branching, merge conflicts, versioning, or integration across
+  parallel workstreams.
 ---
 # Git Workflow and Versioning
 
@@ -29,9 +28,10 @@ This is the recommended default. Teams using gitflow or long-lived branches can 
 - **Release branches are acceptable.** When you need to stabilize a release while main moves forward.
 - **Feature flags > long branches.** Prefer deploying incomplete work behind flags rather than keeping it on a branch for weeks.
 
-### 1. Commit Early, Commit Often
+### 1. Commit verified increments when authorized
 
-Each successful increment gets its own commit. Don't accumulate large uncommitted changes.
+When the task includes commit authority, give each successful increment its own commit. Otherwise,
+leave verified working-tree changes for the user to review.
 
 ```
 Work pattern:
