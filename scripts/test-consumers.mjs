@@ -1,5 +1,4 @@
 import assert from "node:assert/strict";
-import { execFileSync } from "node:child_process";
 import {
   cp,
   mkdir,
@@ -20,6 +19,7 @@ import {
   parseClaudeInventory,
 } from "./consumer-contract.mjs";
 import { prepareConsumerFixture } from "./consumer-evidence.mjs";
+import { runConsumer } from "./consumer-process.mjs";
 
 const sourceRoot = path.resolve(import.meta.dirname, "..");
 const discoveryOnly = process.argv.includes("--discovery-only");
@@ -51,25 +51,15 @@ const schema = {
   },
 };
 
+let processIndex = 0;
+
 function run(command, args, options = {}) {
-  try {
-    return execFileSync(command, args, {
-      cwd: options.cwd ?? fixtureRoot,
-      env: { ...process.env, ...options.env },
-      encoding: "utf8",
-      maxBuffer: 20 * 1024 * 1024,
-      timeout: options.timeout ?? 120_000,
-      stdio: ["ignore", "pipe", "pipe"],
-    });
-  } catch (error) {
-    const stdout = error.stdout?.toString().trim();
-    const stderr = error.stderr?.toString().trim();
-    throw new Error([
-      `${command} ${args.slice(0, 4).join(" ")} failed (${error.code ?? "unknown"}, signal ${error.signal ?? "none"})`,
-      stdout && `stdout:\n${stdout}`,
-      stderr && `stderr:\n${stderr}`,
-    ].filter(Boolean).join("\n"), { cause: error });
-  }
+  const transcriptPrefix = path.join(temporaryRoot, `process-${String(++processIndex).padStart(3, "0")}`);
+  return runConsumer(command, args, {
+    ...options,
+    cwd: options.cwd ?? fixtureRoot,
+    transcriptPrefix,
+  });
 }
 
 async function countDirectories(directory) {
@@ -130,11 +120,13 @@ async function proveClaude() {
       "--model", "haiku",
       "--max-turns", "6",
       "--setting-sources", "local",
+      "--strict-mcp-config",
+      "--mcp-config", JSON.stringify({ mcpServers: {} }),
       "--plugin-dir", path.join(snapshotRoot, ".claude"),
       "--output-format", "stream-json",
       "--verbose",
       "A deployment failed because the live health check returned HTTP 503. Produce the smallest actionable incident handoff with cause, evidence, remedy, and one next owner. Use only the facts supplied.",
-    ], { timeout: 90_000 });
+    ], { env, timeout: 90_000 });
     await writeFile(path.join(temporaryRoot, "claude-natural.jsonl"), output);
     const events = output.trim().split("\n").map((line) => JSON.parse(line));
     const selectedActionableCommunication = events.some((event) =>
@@ -155,11 +147,13 @@ async function proveClaude() {
       "--model", "haiku",
       "--max-turns", "10",
       "--setting-sources", "local",
+      "--strict-mcp-config",
+      "--mcp-config", JSON.stringify({ mcpServers: {} }),
       "--plugin-dir", path.join(snapshotRoot, ".claude"),
       "--output-format", "json",
       "--json-schema", JSON.stringify(schema),
       "/sdlc:actionable-communication Read TASK.md, sum.mjs, and EVIDENCE.md and report whether the scoped implementation is complete. Return only the requested structured result.",
-    ], { timeout: 90_000 });
+    ], { env, timeout: 90_000 });
     await writeFile(path.join(temporaryRoot, "claude-handoff.json"), output);
     assertHandoff(handoffFromEnvelope(output));
   }
@@ -206,15 +200,16 @@ async function proveCodex() {
       "--ephemeral",
       "--skip-git-repo-check",
       "--sandbox", "read-only",
+      "--json",
       "--output-schema", schemaPath,
       "--output-last-message", outputPath,
       "-C", fixtureRoot,
-      "$sdlc:actionable-communication Read TASK.md, sum.mjs, and EVIDENCE.md and report whether the scoped implementation is complete. Return only the requested structured result.",
+      naturalTriggers ? "Read TASK.md, sum.mjs, and EVIDENCE.md and report whether the scoped implementation is complete. Return only the requested structured result." : "$sdlc:actionable-communication Read TASK.md, sum.mjs, and EVIDENCE.md and report whether the scoped implementation is complete. Return only the requested structured result.",
     ], { env, timeout: 180_000 });
     assertHandoff(extractJsonObject(await readFile(outputPath, "utf8")));
   }
 
-  return `Codex: 30 skills, 12 native agent profiles${discoveryOnly ? "" : ", actionable handoff"}`;
+  return `Codex: 30 skills, 12 native agent profiles${discoveryOnly ? "" : naturalTriggers ? ", organic handoff (routing unverified)" : ", actionable handoff"}`;
 }
 
 async function proveGrok() {
@@ -232,7 +227,7 @@ async function proveGrok() {
   if (!discoveryOnly) {
     await linkCredential(path.join(os.homedir(), ".grok/auth.json"), path.join(grokHome, "auth.json"));
     const output = run("grok", [
-      "--single", "Use the installed sdlc actionable-communication skill. Read TASK.md, sum.mjs, and EVIDENCE.md and report whether the scoped implementation is complete. Return only the requested structured result.",
+      "--single", naturalTriggers ? "Read TASK.md, sum.mjs, and EVIDENCE.md and report whether the scoped implementation is complete. Return only the requested structured result." : "Use the installed sdlc actionable-communication skill. Read TASK.md, sum.mjs, and EVIDENCE.md and report whether the scoped implementation is complete. Return only the requested structured result.",
       "--cwd", fixtureRoot,
       "--sandbox", "read-only",
       "--no-memory",
