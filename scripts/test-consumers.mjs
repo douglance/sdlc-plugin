@@ -19,6 +19,7 @@ import {
   extractJsonObject,
   parseClaudeInventory,
 } from "./consumer-contract.mjs";
+import { prepareConsumerFixture } from "./consumer-evidence.mjs";
 
 const sourceRoot = path.resolve(import.meta.dirname, "..");
 const discoveryOnly = process.argv.includes("--discovery-only");
@@ -109,11 +110,7 @@ async function prepare() {
     },
   });
   await mkdir(fixtureRoot, { recursive: true });
-  await writeFile(
-    path.join(fixtureRoot, "EVIDENCE.md"),
-    "# Consumer evidence\n\n`node --test` passed for the isolated consumer fixture.\n",
-  );
-  await writeFile(path.join(fixtureRoot, "package.json"), "{\"private\":true,\"type\":\"module\"}\n");
+  await prepareConsumerFixture(fixtureRoot);
   await mkdir(claudeHome, { recursive: true });
   await mkdir(codexHome, { recursive: true });
   await mkdir(grokHome, { recursive: true });
@@ -136,8 +133,9 @@ async function proveClaude() {
       "--plugin-dir", path.join(snapshotRoot, ".claude"),
       "--output-format", "stream-json",
       "--verbose",
-      "A deployment failed because the live health check returned HTTP 503. Produce the smallest actionable incident handoff with cause, evidence, remedy, and one next owner. Use only the facts supplied. Do not use tools unless a relevant installed skill should guide the response.",
+      "A deployment failed because the live health check returned HTTP 503. Produce the smallest actionable incident handoff with cause, evidence, remedy, and one next owner. Use only the facts supplied.",
     ], { timeout: 90_000 });
+    await writeFile(path.join(temporaryRoot, "claude-natural.jsonl"), output);
     const events = output.trim().split("\n").map((line) => JSON.parse(line));
     const selectedActionableCommunication = events.some((event) =>
       event.type === "assistant"
@@ -160,8 +158,9 @@ async function proveClaude() {
       "--plugin-dir", path.join(snapshotRoot, ".claude"),
       "--output-format", "json",
       "--json-schema", JSON.stringify(schema),
-      "/sdlc:actionable-communication Read EVIDENCE.md and report the verified implementation handoff. Return only the requested structured result.",
+      "/sdlc:actionable-communication Read TASK.md, sum.mjs, and EVIDENCE.md and report whether the scoped implementation is complete. Return only the requested structured result.",
     ], { timeout: 90_000 });
+    await writeFile(path.join(temporaryRoot, "claude-handoff.json"), output);
     assertHandoff(handoffFromEnvelope(output));
   }
 
@@ -210,7 +209,7 @@ async function proveCodex() {
       "--output-schema", schemaPath,
       "--output-last-message", outputPath,
       "-C", fixtureRoot,
-      "$sdlc:actionable-communication Read EVIDENCE.md and report the verified implementation handoff. Return only the requested structured result.",
+      "$sdlc:actionable-communication Read TASK.md, sum.mjs, and EVIDENCE.md and report whether the scoped implementation is complete. Return only the requested structured result.",
     ], { env, timeout: 180_000 });
     assertHandoff(extractJsonObject(await readFile(outputPath, "utf8")));
   }
@@ -233,7 +232,7 @@ async function proveGrok() {
   if (!discoveryOnly) {
     await linkCredential(path.join(os.homedir(), ".grok/auth.json"), path.join(grokHome, "auth.json"));
     const output = run("grok", [
-      "--single", "Use the installed sdlc actionable-communication skill. Read EVIDENCE.md and report the verified implementation handoff. Return only the requested structured result.",
+      "--single", "Use the installed sdlc actionable-communication skill. Read TASK.md, sum.mjs, and EVIDENCE.md and report whether the scoped implementation is complete. Return only the requested structured result.",
       "--cwd", fixtureRoot,
       "--sandbox", "read-only",
       "--no-memory",
@@ -242,6 +241,7 @@ async function proveGrok() {
       "--output-format", "json",
       "--json-schema", JSON.stringify(schema),
     ], { env, timeout: 180_000 });
+    await writeFile(path.join(temporaryRoot, "grok-handoff.json"), output);
     assertHandoff(handoffFromEnvelope(output));
   }
 
