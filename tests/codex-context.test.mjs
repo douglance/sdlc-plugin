@@ -121,7 +121,7 @@ test("native preflight timeout retains diagnostics and actual termination", asyn
     await assert.rejects(probeCodexContext(options), /timed out/);
     const receipt = JSON.parse(await readFile(prefix + ".receipt.json", "utf8"));
     assert.equal(receipt.status, null);
-    assert.equal(receipt.signal, "SIGTERM");
+    assert.equal(receipt.signal, "SIGKILL");
     assert.equal(await readFile(prefix + ".stderr", "utf8"), "fixture waiting");
   });
 });
@@ -161,4 +161,31 @@ test("malformed configuration replies exclude raw payloads from diagnostics and 
     assert.equal(receipt.status, 0);
     assert(!receipt.requestMethods.includes("thread/start"));
   });
+});
+
+test("preflight cancellation terminates a server that ignores SIGTERM", async () => {
+  await runFixture("clean", async (options, prefix) => {
+    const controller = new AbortController();
+    const started = performance.now();
+    const timer = setTimeout(() => controller.abort("must-not-appear"), 250);
+    try {
+      await assert.rejects(probeCodexContext({ ...options, signal: controller.signal, timeout: 5000,
+        serverArgs: ["-e", "process.on('SIGTERM',()=>{});process.stderr.write('waiting');setTimeout(()=>process.exit(0),2000)"] }), /canceled/);
+    } finally { clearTimeout(timer); }
+    assert(performance.now() - started < 1500);
+    const receipt = JSON.parse(await readFile(prefix + ".receipt.json", "utf8"));
+    assert.equal(receipt.status, null);
+    assert.equal(receipt.signal, "SIGKILL");
+    assert(!(await readFile(prefix + ".receipt.json", "utf8")).includes("must-not-appear"));
+  });
+});
+
+test("preflight rejects a canceled or invalid signal before launch", async () => {
+  for (const signal of [AbortSignal.abort("must-not-appear"), "invalid"]) {
+    await runFixture("clean", async (options, prefix) => {
+      await assert.rejects(probeCodexContext({ ...options, signal }),
+        (error) => signal === "invalid" ? error instanceof TypeError : error.code === "ECANCELED");
+      await assert.rejects(readFile(prefix + ".receipt.json"), { code: "ENOENT" });
+    });
+  }
 });

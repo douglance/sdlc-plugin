@@ -45,11 +45,12 @@ const schema = consumerHandoffSchema;
 
 let processIndex = 0;
 
-function run(command, args, options = {}) {
+async function run(command, args, options = {}) {
   const transcriptPrefix = path.join(temporaryRoot, `process-${String(++processIndex).padStart(3, "0")}`);
   return runConsumer(command, args, {
     ...options,
     cwd: options.cwd ?? fixtureRoot,
+    signal: cancellation.signal,
     transcriptPrefix,
   });
 }
@@ -100,13 +101,13 @@ async function prepare() {
 
 async function proveClaude() {
   const env = { CLAUDE_CONFIG_DIR: claudeHome };
-  run("claude", ["plugin", "marketplace", "add", snapshotRoot, "--scope", "user"], { env });
-  run("claude", ["plugin", "install", "sdlc@sdlc-marketplace", "--scope", "user"], { env });
-  const details = run("claude", ["plugin", "details", "sdlc@sdlc-marketplace"], { env });
+  await run("claude", ["plugin", "marketplace", "add", snapshotRoot, "--scope", "user"], { env });
+  await run("claude", ["plugin", "install", "sdlc@sdlc-marketplace", "--scope", "user"], { env });
+  const details = await run("claude", ["plugin", "details", "sdlc@sdlc-marketplace"], { env });
   assertExpectedInventory("Claude", parseClaudeInventory(details));
 
   if (naturalTriggers) {
-    const output = run("claude", [
+    const output = await run("claude", [
       "--print",
       "--permission-mode", "dontAsk",
       "--model", "haiku",
@@ -133,7 +134,7 @@ async function proveClaude() {
     const result = events.findLast((event) => event.type === "result")?.result ?? "";
     assert(/\b503\b/.test(result), "Claude's natural-trigger result omitted the supplied incident evidence");
   } else if (!discoveryOnly) {
-    const output = run("claude", [
+    const output = await run("claude", [
       "--print",
       "--permission-mode", "dontAsk",
       "--model", "haiku",
@@ -157,12 +158,12 @@ async function proveClaude() {
 
 async function proveCodex() {
   const env = { CODEX_HOME: codexHome };
-  run("codex", ["plugin", "marketplace", "add", snapshotRoot, "--json"], { env });
+  await run("codex", ["plugin", "marketplace", "add", snapshotRoot, "--json"], { env });
   const installation = extractJsonObject(
-    run("codex", ["plugin", "add", "sdlc@sdlc-marketplace", "--json"], { env }),
+    await run("codex", ["plugin", "add", "sdlc@sdlc-marketplace", "--json"], { env }),
   );
   const listing = extractJsonObject(
-    run("codex", ["plugin", "list", "--marketplace", "sdlc-marketplace", "--json"], { env }),
+    await run("codex", ["plugin", "list", "--marketplace", "sdlc-marketplace", "--json"], { env }),
   );
   assert.equal(listing.installed?.[0]?.installed, true, "Codex does not report sdlc as installed");
   assert.equal(
@@ -170,7 +171,7 @@ async function proveCodex() {
     30,
     "Codex installed skill count differs from 30",
   );
-  const agentInstall = extractJsonObject(run("node", [
+  const agentInstall = extractJsonObject(await run("node", [
     path.join(snapshotRoot, "scripts/install-codex-agents.mjs"),
     "--codex-home", codexHome,
     "--json",
@@ -186,13 +187,13 @@ async function proveCodex() {
     await linkCredential(path.join(os.homedir(), ".codex/auth.json"), path.join(codexHome, "auth.json"));
   }
   const baselineContext = await probeCodexContext({
-    codexHome, cwd: fixtureRoot,
+    codexHome, cwd: fixtureRoot, signal: cancellation.signal,
     extraArgs: isolatedCodexFeatures.flatMap((feature) => ["--disable", feature]),
     transcriptPrefix: path.join(temporaryRoot, "codex-context-before"),
   });
   const isolationArgs = codexIsolationArgs(baselineContext);
   const isolatedContext = await probeCodexContext({
-    codexHome, cwd: fixtureRoot, extraArgs: isolationArgs,
+    codexHome, cwd: fixtureRoot, signal: cancellation.signal, extraArgs: isolationArgs,
     transcriptPrefix: path.join(temporaryRoot, "codex-context-after"),
   });
   const isolationProof = assertCodexIsolation(isolatedContext);
@@ -203,7 +204,7 @@ async function proveCodex() {
     const schemaPath = path.join(temporaryRoot, "handoff.schema.json");
     const outputPath = path.join(temporaryRoot, "codex-handoff.json");
     await writeFile(schemaPath, `${JSON.stringify(schema, null, 2)}\n`);
-    run("codex", [
+    await run("codex", [
       ...isolationArgs,
       "exec",
       "--ephemeral",
@@ -223,19 +224,19 @@ async function proveCodex() {
 
 async function proveGrok() {
   const env = { GROK_HOME: grokHome };
-  run("grok", ["plugin", "install", path.join(snapshotRoot, ".claude"), "--trust"], { env });
-  const plugins = JSON.parse(run("grok", ["plugin", "list", "--json"], { env }));
+  await run("grok", ["plugin", "install", path.join(snapshotRoot, ".claude"), "--trust"], { env });
+  const plugins = JSON.parse(await run("grok", ["plugin", "list", "--json"], { env }));
   const installed = plugins.find((plugin) => plugin.name === "sdlc");
   assert(installed, "Grok does not report sdlc as installed");
   assertExpectedInventory("Grok", {
     skills: await countDirectories(path.join(installed.path, "skills")),
     agents: await countFiles(path.join(installed.path, "agents"), ".md"),
   });
-  run("grok", ["plugin", "details", "sdlc"], { env });
+  await run("grok", ["plugin", "details", "sdlc"], { env });
 
   if (!discoveryOnly) {
     await linkCredential(path.join(os.homedir(), ".grok/auth.json"), path.join(grokHome, "auth.json"));
-    const output = run("grok", [
+    const output = await run("grok", [
       "--single", naturalTriggers ? "Read TASK.md, sum.mjs, and EVIDENCE.md and report whether the scoped implementation is complete. Return only the requested structured result." : "Use the installed sdlc actionable-communication skill. Read TASK.md, sum.mjs, and EVIDENCE.md and report whether the scoped implementation is complete. Return only the requested structured result.",
       "--cwd", fixtureRoot,
       "--sandbox", "read-only",
@@ -252,6 +253,15 @@ async function proveGrok() {
   return `Grok: 30 skills, 12 agents${discoveryOnly ? "" : ", actionable handoff"}`;
 }
 
+const cancellation = new AbortController();
+let canceledBySignal;
+const signalHandlers = new Map(["SIGINT", "SIGTERM"].map((signal) => [signal, () => {
+  canceledBySignal = signal;
+  process.exitCode = signal === "SIGINT" ? 130 : 143;
+  cancellation.abort();
+}]));
+for (const [signal, handler] of signalHandlers) process.once(signal, handler);
+
 try {
   await prepare();
   const results = [];
@@ -260,7 +270,11 @@ try {
   if (selectedProvider === "all" || selectedProvider === "grok") results.push(await proveGrok());
   process.stdout.write(`${results.join("\n")}\n`);
   process.stdout.write(`Consumer proof passed in isolated homes${discoveryOnly ? " (discovery only)" : ""}.\n`);
+} catch (error) {
+  if (!cancellation.signal.aborted) throw error;
+  process.stderr.write("Consumer proof canceled (" + canceledBySignal + ").\n");
 } finally {
+  for (const [signal, handler] of signalHandlers) process.removeListener(signal, handler);
   if (keepTemp) {
     process.stdout.write(`Kept consumer test environment at ${temporaryRoot}\n`);
   } else {

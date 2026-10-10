@@ -3,7 +3,7 @@ import { spawn } from "node:child_process";
 import { mkdir, realpath, writeFile } from "node:fs/promises";
 import path from "node:path";
 import readline from "node:readline";
-import { consumerEnvironment } from "./consumer-process.mjs";
+import { consumerEnvironment, stopConsumer, validateConsumerSignal } from "./consumer-process.mjs";
 
 export const isolatedCodexFeatures = [
   "apps", "memories", "hooks", "multi_agent", "multi_agent_v2",
@@ -72,20 +72,24 @@ export function assertCodexIsolation(context, expectedSkills = 30) {
 
 export async function probeCodexContext({
   codexHome, cwd, extraArgs = [], transcriptPrefix, timeout = 30_000,
-  executable = "codex", serverArgs = ["app-server", "--stdio"],
+  executable = "codex", serverArgs = ["app-server", "--stdio"], signal,
 }) {
+  signal = validateConsumerSignal(signal);
   const home = await realpath(codexHome);
   const directory = await realpath(cwd);
+  validateConsumerSignal(signal);
   const commandArgs = [...extraArgs, ...serverArgs];
   const controller = new AbortController();
   const child = spawn(executable, commandArgs, {
     cwd: directory, env: consumerEnvironment(process.env, { CODEX_HOME: home }),
-    stdio: ["pipe", "pipe", "pipe"], signal: controller.signal,
+    stdio: ["pipe", "pipe", "pipe"], signal: controller.signal, killSignal: "SIGKILL",
+    detached: process.platform !== "win32",
   });
   let stdout = "";
   let stdoutBytes = 0;
   let stderr = "";
   let failure;
+  let cleanupError;
   const pending = new Map();
   const requestMethods = [];
   const fail = (error) => {
@@ -93,21 +97,30 @@ export async function probeCodexContext({
     for (const waiter of pending.values()) waiter.reject(failure);
     pending.clear();
   };
+  const terminate = () => {
+    try { stopConsumer(child); }
+    catch (error) { cleanupError ??= error; fail(error); }
+    controller.abort();
+  };
   child.stdout.setEncoding("utf8");
   child.stderr.setEncoding("utf8");
   child.stdout.on("data", (chunk) => {
     stdoutBytes += Buffer.byteLength(chunk);
     if (stdoutBytes > 20 * 1024 * 1024) {
       fail(new Error("Codex context stdout exceeded 20 MiB"));
-      controller.abort();
+      terminate();
     }
   });
   child.stderr.on("data", (chunk) => {
     stderr += chunk;
     if (Buffer.byteLength(stderr) > 20 * 1024 * 1024) {
       fail(new Error("Codex context stderr exceeded 20 MiB"));
-      controller.abort();
+      terminate();
     }
+  });
+  child.once("exit", () => {
+    try { stopConsumer(child); }
+    catch (error) { cleanupError ??= error; fail(error); }
   });
   child.on("error", fail);
   child.stdin.on("error", fail);
@@ -149,9 +162,14 @@ export async function probeCodexContext({
     fail(new Error("Codex app-server closed before its pending response"));
     resolve({ status, signal });
   }));
+  const onCancel = () => {
+    fail(Object.assign(new Error("Codex context canceled"), { code: "ECANCELED" }));
+    terminate();
+  };
+  signal?.addEventListener("abort", onCancel, { once: true });
   const timer = setTimeout(() => {
     fail(new Error("Codex context timed out"));
-    controller.abort();
+    terminate();
   }, timeout);
   const send = (id, method, params) => {
     if (failure) return Promise.reject(failure);
@@ -190,6 +208,7 @@ export async function probeCodexContext({
     child.stdin.end();
     const server = await closed;
     clearTimeout(timer);
+    signal?.removeEventListener("abort", onCancel);
     lines.close();
     if (transcriptPrefix) {
       await mkdir(path.dirname(transcriptPrefix), { recursive: true });
@@ -198,6 +217,7 @@ export async function probeCodexContext({
       await writeFile(transcriptPrefix + ".receipt.json", JSON.stringify({
         command: executable, args: commandArgs, cwd: directory,
         ...server, error: operationError?.message ?? null, requestMethods,
+        cleanupError: cleanupError?.code ?? null,
       }, null, 2) + "\n");
     }
     if (result) result.server = server;

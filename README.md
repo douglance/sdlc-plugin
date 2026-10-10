@@ -126,6 +126,20 @@ agent profiles. Model-backed runs check the handoff's declared status and eviden
 removed unless `--keep-temp` is selected. Use `pnpm test:consumers:discovery` when model-backed
 execution is unavailable.
 
+Consumer commands run asynchronously. On POSIX, each starts in its own process group; timeout,
+output overflow, and root exit send SIGKILL to that group. The runner waits for pipe closure and
+records ECLEANUP rather than success if cleanup does not finish within one second. Each captured
+stream is capped at 20 MiB, with partial output retained on failure. Invalid timeout values are
+rejected before launch; zero explicitly disables the command deadline.
+The CLI forwards SIGINT and SIGTERM through an AbortSignal to the active command or Codex
+preflight, records cancellation, and exits with 130 or 143. Direct callers can pass an
+AbortSignal too; invalid or already canceled signals are rejected before launch.
+
+Receipts record the actual root status, termination signal, cleanup scope, and cleanup error.
+Windows uses best-effort taskkill while the root exists. Windows cleanup after root exit and
+descendants that leave the owned POSIX group remain unproved. Forced caller SIGKILL cannot
+run this cooperative cleanup.
+
 Codex also queries its native app-server before generating. The preflight disables enabled skills
 outside the temporary Codex home by exact `SKILL.md` path and verifies the catalog again. It checks
 that apps, memory, hooks, remote plugin discovery, tool suggestions, authentication elicitation,
