@@ -88,8 +88,17 @@ export function assertHandoff(handoff) {
     `consumer handoff does not report a completed lifecycle phase: ${JSON.stringify(handoff)}`,
   );
   assert(
-    /\b(node|npm|pnpm|bun|deno|pytest|cargo|go test|swift test|xcodebuild)\b.*\b(test|passed|ok|success)/i.test(handoff.evidence),
+    /\b(node|npm|pnpm|bun|deno|pytest|cargo|go test|swift test|xcodebuild)\b.*\b(pass(?:ed|ing)?|ok|success(?:ful(?:ly)?)?|succeeded)\b/i.test(handoff.evidence),
     "consumer handoff does not contain executable evidence",
+  );
+  const failureCounts = [...handoff.evidence.matchAll(
+    /\b(\d+)\s+(?:tests?\s+)?(?:failed|failures?|errors?)\b|\b(?:failed|failures?|errors?)\s*(?:[:=]\s*)?(\d+)\b/gi,
+  )].map((match) => Number(match[1] ?? match[2]));
+  assert(
+    failureCounts.every((count) => count === 0)
+      && !/\b(?:test|tests|suite|build|checks?|command|run|execution)\s+(?:failed|failing)\b/i.test(handoff.evidence)
+      && !/\b(?:0+|zero|no)\s+(?:tests?\s+)?pass(?:ed|ing)?\b/i.test(handoff.evidence),
+    "consumer handoff reports failed checks",
   );
 }
 

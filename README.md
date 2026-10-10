@@ -122,7 +122,7 @@ pnpm test:consumers
 
 The consumer checks create separate configuration homes and a fixture repository, install the
 local snapshot through each host's real plugin interface, and verify 30 skills and 12 installed
-agent profiles. Model-backed runs grade the resulting handoff. The temporary environment is
+agent profiles. Model-backed runs check the handoff's declared status and evidence wording. The temporary environment is
 removed unless `--keep-temp` is selected. Use `pnpm test:consumers:discovery` when model-backed
 execution is unavailable.
 
