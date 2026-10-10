@@ -15,11 +15,13 @@ import path from "node:path";
 import {
   assertExpectedInventory,
   assertHandoff,
+  consumerHandoffSchema,
   extractJsonObject,
   parseClaudeInventory,
 } from "./consumer-contract.mjs";
 import { prepareConsumerFixture } from "./consumer-evidence.mjs";
 import { runConsumer } from "./consumer-process.mjs";
+import { assertCodexIsolation, codexIsolationArgs, isolatedCodexFeatures, probeCodexContext } from "./codex-context.mjs";
 
 const sourceRoot = path.resolve(import.meta.dirname, "..");
 const discoveryOnly = process.argv.includes("--discovery-only");
@@ -39,17 +41,7 @@ const claudeHome = path.join(temporaryRoot, "claude");
 const codexHome = path.join(temporaryRoot, "codex");
 const grokHome = path.join(temporaryRoot, "grok");
 
-const schema = {
-  type: "object",
-  additionalProperties: false,
-  required: ["outcome", "phase", "evidence", "open"],
-  properties: {
-    outcome: { type: "string" },
-    phase: { type: "string" },
-    evidence: { type: "string" },
-    open: { type: "string" },
-  },
-};
+const schema = consumerHandoffSchema;
 
 let processIndex = 0;
 
@@ -192,10 +184,27 @@ async function proveCodex() {
 
   if (!discoveryOnly) {
     await linkCredential(path.join(os.homedir(), ".codex/auth.json"), path.join(codexHome, "auth.json"));
+  }
+  const baselineContext = await probeCodexContext({
+    codexHome, cwd: fixtureRoot,
+    extraArgs: isolatedCodexFeatures.flatMap((feature) => ["--disable", feature]),
+    transcriptPrefix: path.join(temporaryRoot, "codex-context-before"),
+  });
+  const isolationArgs = codexIsolationArgs(baselineContext);
+  const isolatedContext = await probeCodexContext({
+    codexHome, cwd: fixtureRoot, extraArgs: isolationArgs,
+    transcriptPrefix: path.join(temporaryRoot, "codex-context-after"),
+  });
+  const isolationProof = assertCodexIsolation(isolatedContext);
+  await writeFile(path.join(temporaryRoot, "codex-context.json"),
+    JSON.stringify({ before: baselineContext, after: isolatedContext, isolationArgs, isolationProof }, null, 2) + "\n");
+
+  if (!discoveryOnly) {
     const schemaPath = path.join(temporaryRoot, "handoff.schema.json");
     const outputPath = path.join(temporaryRoot, "codex-handoff.json");
     await writeFile(schemaPath, `${JSON.stringify(schema, null, 2)}\n`);
     run("codex", [
+      ...isolationArgs,
       "exec",
       "--ephemeral",
       "--skip-git-repo-check",
@@ -209,7 +218,7 @@ async function proveCodex() {
     assertHandoff(extractJsonObject(await readFile(outputPath, "utf8")));
   }
 
-  return `Codex: 30 skills, 12 native agent profiles${discoveryOnly ? "" : naturalTriggers ? ", organic handoff (routing unverified)" : ", actionable handoff"}`;
+  return `Codex: 30 skills, 12 installed native agent profiles, verified local preflight${discoveryOnly ? "" : naturalTriggers ? ", organic handoff (routing unverified)" : ", actionable handoff"}`;
 }
 
 async function proveGrok() {

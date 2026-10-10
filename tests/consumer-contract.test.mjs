@@ -4,6 +4,7 @@ import test from "node:test";
 
 import {
   assertHandoff,
+  consumerHandoffSchema,
   parseClaudeInventory,
   parseGrokInventory,
 } from "../scripts/consumer-contract.mjs";
@@ -75,4 +76,15 @@ test("rejects a handoff without executable evidence", () => {
     evidence: "Looks correct.",
     open: "none",
   }), /executable evidence/);
+});
+
+test("handoff schema declares status without forcing completion", () => {
+  const phases = consumerHandoffSchema.properties.phase.enum;
+  assert(phases.includes("implementation - complete"));
+  assert(phases.includes("implementation - partial"));
+  assert(phases.includes("implementation - blocked"));
+  assert(!phases.includes("implementation"));
+  assert(!phases.includes("complete"));
+  assert.equal(consumerHandoffSchema.additionalProperties, false);
+  assert.deepEqual(consumerHandoffSchema.required, ["outcome", "phase", "evidence", "open"]);
 });

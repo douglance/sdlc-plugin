@@ -2,6 +2,41 @@ import assert from "node:assert/strict";
 
 const expectedInventory = { skills: 30, agents: 12 };
 
+const lifecyclePhases = [
+  "feasibility", "requirements", "planning", "design", "visual design", "implementation",
+  "testing", "quality", "deployment", "operations", "documentation", "maintenance",
+];
+
+export const consumerHandoffSchema = {
+  type: "object",
+  additionalProperties: false,
+  required: ["outcome", "phase", "evidence", "open"],
+  properties: {
+    outcome: {
+      type: "string", minLength: 1,
+      description: "The concrete deliverable or verified result within the requested scope.",
+    },
+    phase: {
+      type: "string",
+      enum: lifecyclePhases.flatMap((phase) =>
+        ["complete", "partial", "blocked"].map((status) => phase + " - " + status)),
+      description: "The lifecycle phase and its actual completion status.",
+    },
+    evidence: {
+      type: "string", minLength: 1,
+      description: "The verified executable command and its observed result. Say evidence is unavailable if it was not verified.",
+    },
+    open: {
+      type: "string", minLength: 1,
+      description: "Unresolved work within the requested scope, or none. Distinguish excluded scope from unfinished work.",
+    },
+  },
+};
+
+const completedPhase = new RegExp(
+  "^(?:" + lifecyclePhases.join("|") + ")\\s*(?:-|–|—|:)\\s*complete$", "i",
+);
+
 export function parseClaudeInventory(output) {
   const skills = output.match(/\bSkills \((\d+)\)/)?.[1];
   const agents = output.match(/\bAgents \((\d+)\)/)?.[1];
@@ -49,7 +84,7 @@ export function assertHandoff(handoff) {
     assert(handoff[field].trim(), `consumer handoff field is empty: ${field}`);
   }
   assert(
-    /^(?:feasibility|requirements|planning|design|visual design|implementation|testing|quality|deployment|operations|documentation|maintenance)\s*(?:-|–|—|:)\s*complete$/i.test(handoff.phase.trim()),
+    completedPhase.test(handoff.phase.trim()),
     `consumer handoff does not report a completed lifecycle phase: ${JSON.stringify(handoff)}`,
   );
   assert(
