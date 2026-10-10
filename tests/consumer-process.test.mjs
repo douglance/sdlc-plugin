@@ -142,7 +142,24 @@ test("timeout retains partial output and its actual termination receipt", async 
     assert.equal(await readFile(prefix + ".stdout", "utf8"), "started");
     const receipt = JSON.parse(await readFile(prefix + ".receipt.json", "utf8"));
     assert.equal(receipt.error, "ETIMEDOUT");
-    assert.equal(receipt.signal, "SIGTERM");
+    assert.equal(receipt.signal, "SIGKILL");
     assert.equal(receipt.status, null);
+  });
+});
+
+test("timeout terminates a child that ignores SIGTERM", async () => {
+  await fixture(async (root) => {
+    const prefix = path.join(root, "ignores-term");
+    const started = performance.now();
+    assert.throws(() => runConsumer(process.execPath, ["-e",
+      "process.on('SIGTERM',()=>{});process.stdout.write('ready');setTimeout(()=>process.exit(0),2000)"
+    ], { transcriptPrefix: prefix, timeout: 250 }), /ETIMEDOUT/);
+    const elapsedMs = performance.now() - started;
+    assert.equal(await readFile(prefix + ".stdout", "utf8"), "ready");
+    const receipt = JSON.parse(await readFile(prefix + ".receipt.json", "utf8"));
+    assert.equal(receipt.error, "ETIMEDOUT");
+    assert.equal(receipt.signal, "SIGKILL");
+    assert.equal(receipt.status, null);
+    assert(elapsedMs < 1500, "timeout must return before the fixture's natural exit");
   });
 });

@@ -51,6 +51,7 @@ export function runConsumer(command, args, options = {}) {
     encoding: "utf8",
     maxBuffer: 20 * 1024 * 1024,
     timeout: options.timeout ?? 120_000,
+    killSignal: "SIGKILL",
     stdio: ["ignore", "pipe", "pipe"],
   });
   const stdout = result.stdout ?? "";
