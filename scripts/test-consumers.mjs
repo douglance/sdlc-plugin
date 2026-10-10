@@ -1,5 +1,4 @@
 import assert from "node:assert/strict";
-import { execFileSync } from "node:child_process";
 import {
   cp,
   mkdir,
@@ -16,9 +15,13 @@ import path from "node:path";
 import {
   assertExpectedInventory,
   assertHandoff,
+  consumerHandoffSchema,
   extractJsonObject,
   parseClaudeInventory,
 } from "./consumer-contract.mjs";
+import { prepareConsumerFixture } from "./consumer-evidence.mjs";
+import { runConsumer } from "./consumer-process.mjs";
+import { assertCodexIsolation, codexIsolationArgs, isolatedCodexFeatures, probeCodexContext } from "./codex-context.mjs";
 
 const sourceRoot = path.resolve(import.meta.dirname, "..");
 const discoveryOnly = process.argv.includes("--discovery-only");
@@ -38,37 +41,18 @@ const claudeHome = path.join(temporaryRoot, "claude");
 const codexHome = path.join(temporaryRoot, "codex");
 const grokHome = path.join(temporaryRoot, "grok");
 
-const schema = {
-  type: "object",
-  additionalProperties: false,
-  required: ["outcome", "phase", "evidence", "open"],
-  properties: {
-    outcome: { type: "string" },
-    phase: { type: "string" },
-    evidence: { type: "string" },
-    open: { type: "string" },
-  },
-};
+const schema = consumerHandoffSchema;
 
-function run(command, args, options = {}) {
-  try {
-    return execFileSync(command, args, {
-      cwd: options.cwd ?? fixtureRoot,
-      env: { ...process.env, ...options.env },
-      encoding: "utf8",
-      maxBuffer: 20 * 1024 * 1024,
-      timeout: options.timeout ?? 120_000,
-      stdio: ["ignore", "pipe", "pipe"],
-    });
-  } catch (error) {
-    const stdout = error.stdout?.toString().trim();
-    const stderr = error.stderr?.toString().trim();
-    throw new Error([
-      `${command} ${args.slice(0, 4).join(" ")} failed (${error.code ?? "unknown"}, signal ${error.signal ?? "none"})`,
-      stdout && `stdout:\n${stdout}`,
-      stderr && `stderr:\n${stderr}`,
-    ].filter(Boolean).join("\n"), { cause: error });
-  }
+let processIndex = 0;
+
+async function run(command, args, options = {}) {
+  const transcriptPrefix = path.join(temporaryRoot, `process-${String(++processIndex).padStart(3, "0")}`);
+  return runConsumer(command, args, {
+    ...options,
+    cwd: options.cwd ?? fixtureRoot,
+    signal: cancellation.signal,
+    transcriptPrefix,
+  });
 }
 
 async function countDirectories(directory) {
@@ -109,11 +93,7 @@ async function prepare() {
     },
   });
   await mkdir(fixtureRoot, { recursive: true });
-  await writeFile(
-    path.join(fixtureRoot, "EVIDENCE.md"),
-    "# Consumer evidence\n\n`node --test` passed for the isolated consumer fixture.\n",
-  );
-  await writeFile(path.join(fixtureRoot, "package.json"), "{\"private\":true,\"type\":\"module\"}\n");
+  await prepareConsumerFixture(fixtureRoot);
   await mkdir(claudeHome, { recursive: true });
   await mkdir(codexHome, { recursive: true });
   await mkdir(grokHome, { recursive: true });
@@ -121,23 +101,26 @@ async function prepare() {
 
 async function proveClaude() {
   const env = { CLAUDE_CONFIG_DIR: claudeHome };
-  run("claude", ["plugin", "marketplace", "add", snapshotRoot, "--scope", "user"], { env });
-  run("claude", ["plugin", "install", "sdlc@sdlc-marketplace", "--scope", "user"], { env });
-  const details = run("claude", ["plugin", "details", "sdlc@sdlc-marketplace"], { env });
+  await run("claude", ["plugin", "marketplace", "add", snapshotRoot, "--scope", "user"], { env });
+  await run("claude", ["plugin", "install", "sdlc@sdlc-marketplace", "--scope", "user"], { env });
+  const details = await run("claude", ["plugin", "details", "sdlc@sdlc-marketplace"], { env });
   assertExpectedInventory("Claude", parseClaudeInventory(details));
 
   if (naturalTriggers) {
-    const output = run("claude", [
+    const output = await run("claude", [
       "--print",
       "--permission-mode", "dontAsk",
       "--model", "haiku",
       "--max-turns", "6",
       "--setting-sources", "local",
+      "--strict-mcp-config",
+      "--mcp-config", JSON.stringify({ mcpServers: {} }),
       "--plugin-dir", path.join(snapshotRoot, ".claude"),
       "--output-format", "stream-json",
       "--verbose",
-      "A deployment failed because the live health check returned HTTP 503. Produce the smallest actionable incident handoff with cause, evidence, remedy, and one next owner. Use only the facts supplied. Do not use tools unless a relevant installed skill should guide the response.",
-    ], { timeout: 90_000 });
+      "A deployment failed because the live health check returned HTTP 503. Produce the smallest actionable incident handoff with cause, evidence, remedy, and one next owner. Use only the facts supplied.",
+    ], { env, timeout: 90_000 });
+    await writeFile(path.join(temporaryRoot, "claude-natural.jsonl"), output);
     const events = output.trim().split("\n").map((line) => JSON.parse(line));
     const selectedActionableCommunication = events.some((event) =>
       event.type === "assistant"
@@ -151,17 +134,20 @@ async function proveClaude() {
     const result = events.findLast((event) => event.type === "result")?.result ?? "";
     assert(/\b503\b/.test(result), "Claude's natural-trigger result omitted the supplied incident evidence");
   } else if (!discoveryOnly) {
-    const output = run("claude", [
+    const output = await run("claude", [
       "--print",
       "--permission-mode", "dontAsk",
       "--model", "haiku",
       "--max-turns", "10",
       "--setting-sources", "local",
+      "--strict-mcp-config",
+      "--mcp-config", JSON.stringify({ mcpServers: {} }),
       "--plugin-dir", path.join(snapshotRoot, ".claude"),
       "--output-format", "json",
       "--json-schema", JSON.stringify(schema),
-      "/sdlc:actionable-communication Read EVIDENCE.md and report the verified implementation handoff. Return only the requested structured result.",
-    ], { timeout: 90_000 });
+      "/sdlc:actionable-communication Read TASK.md, sum.mjs, and EVIDENCE.md and report whether the scoped implementation is complete. Return only the requested structured result.",
+    ], { env, timeout: 90_000 });
+    await writeFile(path.join(temporaryRoot, "claude-handoff.json"), output);
     assertHandoff(handoffFromEnvelope(output));
   }
 
@@ -172,12 +158,12 @@ async function proveClaude() {
 
 async function proveCodex() {
   const env = { CODEX_HOME: codexHome };
-  run("codex", ["plugin", "marketplace", "add", snapshotRoot, "--json"], { env });
+  await run("codex", ["plugin", "marketplace", "add", snapshotRoot, "--json"], { env });
   const installation = extractJsonObject(
-    run("codex", ["plugin", "add", "sdlc@sdlc-marketplace", "--json"], { env }),
+    await run("codex", ["plugin", "add", "sdlc@sdlc-marketplace", "--json"], { env }),
   );
   const listing = extractJsonObject(
-    run("codex", ["plugin", "list", "--marketplace", "sdlc-marketplace", "--json"], { env }),
+    await run("codex", ["plugin", "list", "--marketplace", "sdlc-marketplace", "--json"], { env }),
   );
   assert.equal(listing.installed?.[0]?.installed, true, "Codex does not report sdlc as installed");
   assert.equal(
@@ -185,7 +171,7 @@ async function proveCodex() {
     30,
     "Codex installed skill count differs from 30",
   );
-  const agentInstall = extractJsonObject(run("node", [
+  const agentInstall = extractJsonObject(await run("node", [
     path.join(snapshotRoot, "scripts/install-codex-agents.mjs"),
     "--codex-home", codexHome,
     "--json",
@@ -199,41 +185,59 @@ async function proveCodex() {
 
   if (!discoveryOnly) {
     await linkCredential(path.join(os.homedir(), ".codex/auth.json"), path.join(codexHome, "auth.json"));
+  }
+  const baselineContext = await probeCodexContext({
+    codexHome, cwd: fixtureRoot, signal: cancellation.signal,
+    extraArgs: isolatedCodexFeatures.flatMap((feature) => ["--disable", feature]),
+    transcriptPrefix: path.join(temporaryRoot, "codex-context-before"),
+  });
+  const isolationArgs = codexIsolationArgs(baselineContext);
+  const isolatedContext = await probeCodexContext({
+    codexHome, cwd: fixtureRoot, signal: cancellation.signal, extraArgs: isolationArgs,
+    transcriptPrefix: path.join(temporaryRoot, "codex-context-after"),
+  });
+  const isolationProof = assertCodexIsolation(isolatedContext);
+  await writeFile(path.join(temporaryRoot, "codex-context.json"),
+    JSON.stringify({ before: baselineContext, after: isolatedContext, isolationArgs, isolationProof }, null, 2) + "\n");
+
+  if (!discoveryOnly) {
     const schemaPath = path.join(temporaryRoot, "handoff.schema.json");
     const outputPath = path.join(temporaryRoot, "codex-handoff.json");
     await writeFile(schemaPath, `${JSON.stringify(schema, null, 2)}\n`);
-    run("codex", [
+    await run("codex", [
+      ...isolationArgs,
       "exec",
       "--ephemeral",
       "--skip-git-repo-check",
       "--sandbox", "read-only",
+      "--json",
       "--output-schema", schemaPath,
       "--output-last-message", outputPath,
       "-C", fixtureRoot,
-      "$sdlc:actionable-communication Read EVIDENCE.md and report the verified implementation handoff. Return only the requested structured result.",
+      naturalTriggers ? "Read TASK.md, sum.mjs, and EVIDENCE.md and report whether the scoped implementation is complete. Return only the requested structured result." : "$sdlc:actionable-communication Read TASK.md, sum.mjs, and EVIDENCE.md and report whether the scoped implementation is complete. Return only the requested structured result.",
     ], { env, timeout: 180_000 });
     assertHandoff(extractJsonObject(await readFile(outputPath, "utf8")));
   }
 
-  return `Codex: 30 skills, 12 native agent profiles${discoveryOnly ? "" : ", actionable handoff"}`;
+  return `Codex: 30 skills, 12 installed native agent profiles, verified local preflight${discoveryOnly ? "" : naturalTriggers ? ", organic handoff (routing unverified)" : ", actionable handoff"}`;
 }
 
 async function proveGrok() {
   const env = { GROK_HOME: grokHome };
-  run("grok", ["plugin", "install", path.join(snapshotRoot, ".claude"), "--trust"], { env });
-  const plugins = JSON.parse(run("grok", ["plugin", "list", "--json"], { env }));
+  await run("grok", ["plugin", "install", path.join(snapshotRoot, ".claude"), "--trust"], { env });
+  const plugins = JSON.parse(await run("grok", ["plugin", "list", "--json"], { env }));
   const installed = plugins.find((plugin) => plugin.name === "sdlc");
   assert(installed, "Grok does not report sdlc as installed");
   assertExpectedInventory("Grok", {
     skills: await countDirectories(path.join(installed.path, "skills")),
     agents: await countFiles(path.join(installed.path, "agents"), ".md"),
   });
-  run("grok", ["plugin", "details", "sdlc"], { env });
+  await run("grok", ["plugin", "details", "sdlc"], { env });
 
   if (!discoveryOnly) {
     await linkCredential(path.join(os.homedir(), ".grok/auth.json"), path.join(grokHome, "auth.json"));
-    const output = run("grok", [
-      "--single", "Use the installed sdlc actionable-communication skill. Read EVIDENCE.md and report the verified implementation handoff. Return only the requested structured result.",
+    const output = await run("grok", [
+      "--single", naturalTriggers ? "Read TASK.md, sum.mjs, and EVIDENCE.md and report whether the scoped implementation is complete. Return only the requested structured result." : "Use the installed sdlc actionable-communication skill. Read TASK.md, sum.mjs, and EVIDENCE.md and report whether the scoped implementation is complete. Return only the requested structured result.",
       "--cwd", fixtureRoot,
       "--sandbox", "read-only",
       "--no-memory",
@@ -242,11 +246,21 @@ async function proveGrok() {
       "--output-format", "json",
       "--json-schema", JSON.stringify(schema),
     ], { env, timeout: 180_000 });
+    await writeFile(path.join(temporaryRoot, "grok-handoff.json"), output);
     assertHandoff(handoffFromEnvelope(output));
   }
 
   return `Grok: 30 skills, 12 agents${discoveryOnly ? "" : ", actionable handoff"}`;
 }
+
+const cancellation = new AbortController();
+let canceledBySignal;
+const signalHandlers = new Map(["SIGINT", "SIGTERM"].map((signal) => [signal, () => {
+  canceledBySignal = signal;
+  process.exitCode = signal === "SIGINT" ? 130 : 143;
+  cancellation.abort();
+}]));
+for (const [signal, handler] of signalHandlers) process.once(signal, handler);
 
 try {
   await prepare();
@@ -256,7 +270,11 @@ try {
   if (selectedProvider === "all" || selectedProvider === "grok") results.push(await proveGrok());
   process.stdout.write(`${results.join("\n")}\n`);
   process.stdout.write(`Consumer proof passed in isolated homes${discoveryOnly ? " (discovery only)" : ""}.\n`);
+} catch (error) {
+  if (!cancellation.signal.aborted) throw error;
+  process.stderr.write("Consumer proof canceled (" + canceledBySignal + ").\n");
 } finally {
+  for (const [signal, handler] of signalHandlers) process.removeListener(signal, handler);
   if (keepTemp) {
     process.stdout.write(`Kept consumer test environment at ${temporaryRoot}\n`);
   } else {

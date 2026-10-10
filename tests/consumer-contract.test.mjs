@@ -4,6 +4,7 @@ import test from "node:test";
 
 import {
   assertHandoff,
+  consumerHandoffSchema,
   parseClaudeInventory,
   parseGrokInventory,
 } from "../scripts/consumer-contract.mjs";
@@ -75,4 +76,43 @@ test("rejects a handoff without executable evidence", () => {
     evidence: "Looks correct.",
     open: "none",
   }), /executable evidence/);
+});
+
+test("handoff schema declares status without forcing completion", () => {
+  const phases = consumerHandoffSchema.properties.phase.enum;
+  assert(phases.includes("implementation - complete"));
+  assert(phases.includes("implementation - partial"));
+  assert(phases.includes("implementation - blocked"));
+  assert(!phases.includes("implementation"));
+  assert(!phases.includes("complete"));
+  assert.equal(consumerHandoffSchema.additionalProperties, false);
+  assert.deepEqual(consumerHandoffSchema.required, ["outcome", "phase", "evidence", "open"]);
+});
+
+test("rejects executable evidence without a passing result", () => {
+  for (const evidence of ["node --test failed.", "node --test completed.", "node --test: 0 passed, 4 failed."]) {
+    assert.throws(() => assertHandoff({
+      outcome: "Implementation complete.", phase: "implementation - complete", evidence, open: "None.",
+    }), /executable evidence|failed checks/);
+  }
+});
+
+test("rejects completed handoffs that report failed checks", () => {
+  for (const evidence of [
+    "node --test: 3 passed, 1 failed.",
+    "node --test passed: 4; failed: 1.",
+    "node --test failed 04; passed 3.",
+    "node --test: 0 passed, 0 failed.",
+  ]) {
+    assert.throws(() => assertHandoff({
+      outcome: "Implementation complete.", phase: "implementation - complete", evidence, open: "None.",
+    }), /failed checks/);
+  }
+});
+
+test("accepts passing executable evidence with explicit zero failures", () => {
+  assert.doesNotThrow(() => assertHandoff({
+    outcome: "Implementation complete.", phase: "implementation - complete",
+    evidence: "node --test --test-reporter=tap: 4 tests passed, 0 failed.", open: "None.",
+  }));
 });
