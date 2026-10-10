@@ -70,3 +70,79 @@ test("spawn failure retains an error receipt rather than success", async () => {
     assert.equal(receipt.error, "ENOENT");
   });
 });
+
+test("invalid environment overrides are rejected before a child can run", async () => {
+  await fixture(async (root) => {
+    const marker = path.join(root, "must-not-run");
+    const child = ["-e", "require('node:fs').writeFileSync(process.argv[1], 'ran')", marker];
+    for (const env of ["BAD", null, [], 17, { CODEX_HOME: undefined }, { HOME: undefined }]) {
+      assert.throws(() => runConsumer(process.execPath, child, { env }), /environment|override/i);
+      await assert.rejects(readFile(marker), { code: "ENOENT" });
+    }
+  });
+});
+
+test("explicit startup hooks are rejected before spawning", async () => {
+  await fixture(async (root) => {
+    const marker = path.join(root, "must-not-run");
+    const child = ["-e", "require('node:fs').writeFileSync(process.argv[1], 'ran')", marker];
+    for (const env of [{ NODE_OPTIONS: "--trace-warnings" }, { PYTHONPATH: "/fixture" }, { DYLD_INSERT_LIBRARIES: "/fixture" }]) {
+      assert.throws(() => runConsumer(process.execPath, child, { env }), /override/i);
+      await assert.rejects(readFile(marker), { code: "ENOENT" });
+    }
+  });
+});
+
+test("max-buffer failures retain bulk transcripts with a bounded diagnostic", async () => {
+  await fixture(async (root) => {
+    const prefix = path.join(root, "overflow");
+    let failure;
+    try {
+      runConsumer(process.execPath, ["-e", "process.stdout.write('x'.repeat(21 * 1024 * 1024))"], {
+        transcriptPrefix: prefix,
+      });
+    } catch (error) { failure = error; }
+    assert(failure, "overflow must fail");
+    assert.match(failure.message, /ENOBUFS/);
+    assert(Buffer.byteLength(failure.message) < 4096, "failure diagnostics must stay under 4 KiB");
+    assert((await readFile(prefix + ".stdout")).length >= 20 * 1024 * 1024);
+    const receipt = JSON.parse(await readFile(prefix + ".receipt.json", "utf8"));
+    assert.equal(receipt.error, "ENOBUFS");
+    assert.equal(receipt.status, null);
+  });
+});
+
+test("Unicode streams and long argv keep failure diagnostics bounded", async () => {
+  await fixture(async (root) => {
+    const prefix = path.join(root, "unicode");
+    let failure;
+    try {
+      runConsumer(process.execPath, ["-e", "process.stdout.write('💡'.repeat(2000)+'stdout-end');process.stderr.write('💡'.repeat(2000)+'stderr-end');process.exit(17)", "a".repeat(20000)], {
+        transcriptPrefix: prefix,
+      });
+    } catch (error) { failure = error; }
+    assert(failure);
+    assert(Buffer.byteLength(failure.message) < 4096);
+    assert.match(failure.message, /stdout-end/);
+    assert.match(failure.message, /stderr-end/);
+    assert.match(failure.message, /bytes omitted/);
+    assert.equal(await readFile(prefix + ".stdout", "utf8"), "💡".repeat(2000) + "stdout-end");
+    assert.equal(await readFile(prefix + ".stderr", "utf8"), "💡".repeat(2000) + "stderr-end");
+    assert.equal(JSON.parse(await readFile(prefix + ".receipt.json", "utf8")).status, 17);
+  });
+});
+
+test("timeout retains partial output and its actual termination receipt", async () => {
+  await fixture(async (root) => {
+    const prefix = path.join(root, "timeout");
+    assert.throws(() => runConsumer(process.execPath, ["-e", "process.stdout.write('started');setTimeout(()=>{},5000)"], {
+      transcriptPrefix: prefix,
+      timeout: 250,
+    }), /ETIMEDOUT/);
+    assert.equal(await readFile(prefix + ".stdout", "utf8"), "started");
+    const receipt = JSON.parse(await readFile(prefix + ".receipt.json", "utf8"));
+    assert.equal(receipt.error, "ETIMEDOUT");
+    assert.equal(receipt.signal, "SIGTERM");
+    assert.equal(receipt.status, null);
+  });
+});
